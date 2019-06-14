@@ -1,0 +1,129 @@
+*{
+	outline:0;
+	margin:0;
+	padding:0;
+}
+
+body{
+	background-color:rgba(50, 255, 100, 0.4);
+	font-size:16px;
+	font-family: 'Roboto Slab', serif;
+}
+
+.main{
+	display:block;
+	margin:auto;
+	width:80%;
+      	border-radius:5px;
+      	box-shadow:0 0 10px #006600;
+	padding:50px;
+	margin-top:50px;
+	background-color: #E5FFEE; /*old: #ccffdd */
+	color:#006400;
+}
+
+.main > h1{
+	font-family: 'Concert One', cursive;
+	font-size:3em;
+	text-align:center;
+	padding:30px 0;
+}
+
+.side-menu{
+	background-color:#006600;
+	color:white;
+      	border-radius:5px;
+	float:left;
+	width:25%;
+	}
+
+.side-menu h2{
+	padding:15px 0;
+}
+
+.side-menu nav{
+	padding:20px;
+}
+
+.side-menu ul li{
+	display:block;
+	padding:15px 0;
+	clear:both;
+}
+
+.side-menu ul li a{
+	text-decoration:none;
+	color:white;
+}
+
+.side-menu ul li a:hover{
+	transition: 0.2s linear color;
+	color:yellow;
+}
+
+.main-section{
+	float:left;
+	width:75%;
+}
+
+.main-section p{
+	padding:15px 50px;
+	line-height:2;
+}
+
+.equation-form{
+	display:block;
+	margin:auto;
+	padding:30px;
+	text-align:center;
+}
+
+#equation-input{
+	border: 2px solid #00cc00;
+	border-radius:5px;
+	padding:10px;
+	font-size:1.2em;
+	width:80%;
+}
+
+#equation-input:hover{
+	box-shadow: 0 0 8px #00cc00;
+}
+
+#equation-input:focus{
+	border: 2px solid #006600;
+	box-shadow: 0 0 8px #006600;
+}
+
+.main h2{
+	text-align:center;
+}
+
+.dropdown{
+	display: inline-block;
+	font-weight:bold;
+	cursor: pointer;
+	font-size: 1.5em;
+	padding:5px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.dropdown:hover{
+	color:yellow;
+}
+
+nav ul li ul{
+	display:none;
+	width:80%;
+	float: right;
+}
+
+nav ul li ul li{
+	font-size:0.8em;
+	padding:5px;
+}
