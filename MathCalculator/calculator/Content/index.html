@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet">
+	<style>
+		*{
+			outline:0;
+			margin:0;
+			padding:0;
+		}
+		
+		body{
+			background-color:rgba(50, 255, 100, 0.4);
+			font-size:16px;
+			font-family: 'Roboto Slab', serif;
+		}
+		
+		.main{
+			display:block;
+			margin:auto;
+			width:80%;
+			border-radius:5px;
+			box-shadow:0 0 10px #006600;
+			padding:50px;
+			margin-top:50px;
+			background-color: #E5FFEE; /*old: #ccffdd */
+			color:#006400;
+		}
+		
+		.main > h1{
+			font-family: 'Concert One', cursive;
+			font-size:3em;
+			text-align:center;
+			padding:30px 0;
+		}
+		
+		.side-menu{
+			background-color:#006600;
+			color:white;
+			border-radius:5px;
+			float:left;
+			width:25%;
+		}
+		
+		.side-menu h2{
+			padding:15px 0;
+		}
+		
+		.side-menu nav{
+			padding:20px;
+		}
+		
+		.side-menu ul li{
+			display:block;
+			padding:15px 0;
+			clear:both;
+		}
+		
+		.side-menu ul li a{
+			text-decoration:none;
+			color:white;
+		}
+		
+		.side-menu ul li a:hover{
+			transition: 0.2s linear color;
+			color:yellow;
+		}
+		
+		.main-section{
+			float:left;
+			width:75%;
+		}
+		
+		.main-section p{
+			padding:15px 50px;
+			line-height:2;
+		}
+		
+		.equation-form{
+			display:block;
+			margin:auto;
+			padding:30px;
+			text-align:center;
+		}
+		
+		#equation-input{
+			border: 2px solid #00cc00;
+			border-radius:5px;
+			padding:10px;
+			font-size:1.2em;
+			width:80%;
+		}
+
+		#equation-input:hover{
+			box-shadow: 0 0 8px #00cc00;
+		}
+
+		#equation-input:focus{
+			border: 2px solid #006600;
+			box-shadow: 0 0 8px #006600;
+		}
+		
+		.main h2{
+			text-align:center;
+		}
+
+		.dropdown{
+			display: inline-block;
+			font-weight:bold;
+			cursor: pointer;
+			font-size: 1.5em;
+			padding:5px;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.dropdown:hover{
+			color:yellow;
+		}
+
+		nav ul li ul{
+			display:none;
+			width:80%;
+			float: right;
+		}
+
+		nav ul li ul li{
+			font-size:0.8em;
+			padding:5px;
+		}
+	</style>
+	<script type="text/javascript">
+		
+		function init(){
+			var dropdowns = document.getElementsByClassName("dropdown");
+			for(var i = 0; i < dropdowns.length; i++){
+				dropdowns[i].onclick = function(){
+					if(this.style.transform == "rotate(90deg)"){
+						this.style.transform = "rotate(0deg)";
+						this.nextElementSibling.nextElementSibling.style.display = "none";
+					}else{
+						this.style.transform = "rotate(90deg)";
+						this.nextElementSibling.nextElementSibling.style.display = "block";
+					}
+					
+					//this.style.webkitTransform = 'rotate(90deg)'; 
+					//this.style.mozTransform    = 'rotate(90deg)'; 
+					//this.style.msTransform     = 'rotate(90deg)'; 
+					//this.style.oTransform      = 'rotate(90deg)'; 
+					//this.style.transform       = 'rotate(90deg)'; 
+
+					}
+			}
+		}
+	</script>
+</head>
+<body onload="init()">
+	<div class="main">
+		<h1>Advanced Math Calculator</h1>
+		<div class="side-menu">
+			<h2>Topics</h2>
+			<nav>
+				<ul>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Algebra</a>
+						<ul>
+							<li><a href="#">Equations</a></li>
+							<li><a href="#">System of Equations</a></li>
+						</ul>
+					</li>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Calculus</a>
+						<ul>
+							<li><a href="#">Derivatives</a></li>
+							<li><a href="#">Indefinite Integrals</a></li>
+							<li><a href="#">Definite Integrals</a></li>
+						</ul>
+					</li>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Differential Equations</a>
+						<ul>
+							<li><a href="#">First Order</a></li>
+							<li><a href="#">Second Order</a></li>
+						</ul>
+					</li>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Linear Algebra</a>
+						<ul>
+							<li><a href="#">Matrix Addition</a></li>
+							<li><a href="#">Matrix Multiplication</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="main-section">
+			<h2>Test</h2>
+			<form class="equation-form">
+				<input id="equation-input" type="text" placeholder="Enter text here"/>
+			</form>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate odio ut enim blandit volutpat maecenas volutpat. Sit amet aliquam id diam. Lacinia quis vel eros donec. Eu mi bibendum neque egestas congue quisque. Eget sit amet tellus cras. Egestas fringilla phasellus faucibus scelerisque eleifend donec. Tempus imperdiet nulla malesuada pellentesque elit. Velit dignissim sodales ut eu sem integer. Neque egestas congue quisque egestas diam in arcu cursus. Quisque id diam vel quam elementum. Interdum velit laoreet id donec ultrices tincidunt arcu non sodales. Ipsum faucibus vitae aliquet nec ullamcorper sit amet. Scelerisque varius morbi enim nunc faucibus a pellentesque sit.
+			</p>
+			<p>
+				Lobortis feugiat vivamus at augue. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Auctor neque vitae tempus quam pellentesque nec. Nunc sed id semper risus in hendrerit gravida rutrum quisque. Nulla pharetra diam sit amet nisl suscipit adipiscing bibendum. Vel orci porta non pulvinar. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Non consectetur a erat nam at lectus urna. Pellentesque nec nam aliquam sem et tortor consequat. Morbi leo urna molestie at elementum eu facilisis sed. Sem et tortor consequat id porta nibh venenatis.
+			</p>
+			<p>
+				Arcu non odio euismod lacinia at quis risus sed vulputate. Sed velit dignissim sodales ut. Tincidunt augue interdum velit euismod in pellentesque massa. Maecenas ultricies mi eget mauris pharetra et. Faucibus turpis in eu mi bibendum neque egestas congue. Nullam eget felis eget nunc lobortis. Posuere urna nec tincidunt praesent semper feugiat nibh sed pulvinar. Ac placerat vestibulum lectus mauris. Turpis egestas pretium aenean pharetra magna ac placerat vestibulum lectus. Eget gravida cum sociis natoque penatibus et.
+			</p>
+			<p>
+				Magna etiam tempor orci eu lobortis. Placerat vestibulum lectus mauris ultrices eros in cursus turpis massa. Felis imperdiet proin fermentum leo vel orci porta non pulvinar. Morbi quis commodo odio aenean sed adipiscing diam donec. Auctor urna nunc id cursus. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Aenean pharetra magna ac placerat. Leo urna molestie at elementum. Purus ut faucibus pulvinar elementum. Eget sit amet tellus cras adipiscing enim eu turpis. Sit amet justo donec enim diam vulputate.
+			</p>
+			<p>
+			Quam elementum pulvinar etiam non quam lacus suspendisse faucibus interdum. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Consequat mauris nunc congue nisi vitae suscipit tellus mauris a. Porttitor lacus luctus accumsan tortor posuere ac ut. Scelerisque eu ultrices vitae auctor eu augue ut lectus arcu. Neque vitae tempus quam pellentesque nec nam. Turpis egestas integer eget aliquet nibh praesent tristique magna. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Velit ut tortor pretium viverra suspendisse. Tempus egestas sed sed risus. Morbi enim nunc faucibus a pellentesque sit amet. Faucibus ornare suspendisse sed nisi lacus sed viverra tellus.
+			</p>
+		</div>
+		<div style="clear:both;">
+		</div>
+	</div>
+	<br />
+	<br />
+</body>
+</html>
