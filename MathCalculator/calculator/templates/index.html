@@ -3,11 +3,14 @@
 <head>
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet">
-
-	{% load static %}	
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async>
+		MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+	{% load static %}
 
 	<link href="{% static 'css/main.css' %}" rel="stylesheet">
-	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>	
+	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/latex.js' %}"></script>
 </head>
 <body onload="init()">
 	<div class="main">
@@ -18,27 +21,92 @@
 				<ul>
 					<li><div class="dropdown">&rsaquo;</div><a href="#"> Algebra</a>
 						<ul>
-							<li><a href="#">Equations</a></li>
-							<li><a href="#">System of Equations</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Equations</a>
+								<ul>
+									<li><a href="#">Solve Equation/Inequality</a></li>
+									<li><a href="#">Solve System of Equations</a></li>
+									<li><a href="#">Solve Arithmetic Expression</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Find Slope, y-offset, x-offset</a></li>
+							<li><a href="#">Graph Equations</a></li>
+							<li><a href="#">Function Composition</a></li>
+							<li><a href="#">Partial Fraction Decomposition</a></li>
 						</ul>
 					</li>
 					<li><div class="dropdown">&rsaquo;</div><a href="#"> Calculus</a>
 						<ul>
-							<li><a href="#">Derivatives</a></li>
-							<li><a href="#">Indefinite Integrals</a></li>
-							<li><a href="#">Definite Integrals</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Derivatives</a>
+								<ul>
+									<li><a href="#">Standard Derivatives</a></li>
+									<li><a href="#">Partial Derivatives</a></li>
+								</ul>
+							</li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Integrals</a>
+								<ul>
+									<li><a href="#">Indefinite Integrals</a></li>
+									<li><a href="#">Definite Integrals</a></li>
+								</ul>
+							</li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Graphical Information</a>
+								<ul>
+									<li><a href="#">Arc Length</a></li>
+									<li><a href="#">Tangent Line</a></li>
+									<li><a href="#">Critical Points and Min/Max Values</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Limits</a></li>							
 						</ul>
 					</li>
-					<li><div class="dropdown">&rsaquo;</div><a href="#"> Differential Equations</a>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Ordinary Differential Equations</a>
 						<ul>
-							<li><a href="#">First Order</a></li>
-							<li><a href="#">Second Order</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">First Order</a>
+								<ul>
+									<li><a href="#">Linear</a></li>
+									<li><a href="#">Separable</a></li>
+									<li><a href="#">Exact</a></li>
+									<li><a href="#">Euler's Method</a></li>
+								</ul>
+							</li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Second Order</a>
+								<ul>
+									<li><a href="#">Homogenous</a></li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 					<li><div class="dropdown">&rsaquo;</div><a href="#"> Linear Algebra</a>
 						<ul>
-							<li><a href="#">Matrix Addition</a></li>
-							<li><a href="#">Matrix Multiplication</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Matrix On Matrix Operations</a>
+							<ul>
+								<li><a href="#">Matrix Multiplication</a></li>
+								<li><a href="#">Matrix Addition / Subtraction</a></li>
+								<li><a href="#">Matrix Equation (Ax = b)</a></li>
+							</ul>
+							</li>
+							<li><a href="#">System of Linear Equations</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Matrix Info</a>
+							<ul>
+								<li><a href="#">Convert To Reduced Row Echelon Form</a></li>
+								<li><a href="#">Determinant</a></li>
+								<li><a href="#">Transpose</a></li>
+								<li><a href="#">Inverse</a></li>
+								<li><a href="#">Linear Independence</a></li>
+							</ul>
+						</ul>
+					</li>
+					<li><div class="dropdown">&rsaquo;</div><a href="#"> Geometry</a>
+						<ul>
+							<li><a href="#">Area</a></li>
+							<li><a href="#">Perimeter</a></li>
+							<li><div class="dropdown">&rsaquo;</div><a href="#">Triangles</a>
+								<ul>
+									<li><a href="#">Solve For Missing Side Length</a></li>
+									<li><a href="#">Solve For Missing Angle</a></li>
+									<li><a href="#">Compare 2 Triangles</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Arc Length of Circle</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -47,8 +115,11 @@
 		<div class="main-section">
 			<h2>Home</h2>
 			<form class="equation-form">
-				<input id="equation-input" type="text" placeholder="Enter text here"/>
+				<input id="equation-input" type="text" placeholder="Enter equation" value="x^2+2x+1"/>
+				<div class="equation-submit-button" onclick="printLatex()">Submit</div>
 			</form>
+			
+			<div id="equation-display">Sample equation: $x^2+2x+1$</div>
 		</div>
 		<div style="clear:both;">
 		</div>
