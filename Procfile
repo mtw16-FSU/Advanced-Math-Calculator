@@ -1,1 +1,1 @@
-web: gunicorn MathCalculator.wsgi --log-file -
+web: sh -c 'cd [MathCalculator] && gunicorn MathCalculator.wsgi'
