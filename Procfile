@@ -1,1 +1,1 @@
-web: sh -c 'cd [MathCalculator] && gunicorn MathCalculator.wsgi'
+web: sh -c 'cd MathCalculator && gunicorn MathCalculator.wsgi'
