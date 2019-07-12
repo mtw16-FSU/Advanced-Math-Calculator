@@ -86,6 +86,9 @@ body{
 	width:80%;
 	margin:auto;
 	display:block;
+	cursor:text;
+	background-color: white;
+	position:relative;
 }
 
 #equation-input:hover{
@@ -159,4 +162,64 @@ nav ul li ul li{
 	padding:20px;
 	text-align:center;
 	font-size:1.5em;
+}
+
+.symbol-container{
+display:block;
+margin:auto;
+width:90%;
+background-color:white;
+border-radius:5px;
+border:2px solid #003300;
+padding:10px;
+}
+
+.symbol-item{
+	border:1px solid #00cc00;
+	padding:5px 10px;
+	background-color:#fffccc;
+	display: inline;
+	margin: 0 5px;
+	font-size:1.2em;
+}
+
+.symbol-item:hover{
+box-shadow: 0 0 2px #006600;
+cursor:pointer;
+}
+
+.input-item{
+	display:inline;
+}
+
+.sup{
+	display:inline;
+	vertical-align:super;
+}
+
+.sup:focus{
+	border:1px solid blue;
+}
+
+#textarea{
+	position: absolute;
+    width: 100%;
+    left: 0;
+    height: 100%;
+	top: 0;
+	opacity:0;
+	/*overflow:hidden;
+	max-width:100%;
+	resize:none;
+	padding: 5px 10px;
+	font-size:1.2em;*/
+}
+
+#cursor{
+	display:inline;
+	
+}
+
+.equation-form > p{
+	display:none;
 }

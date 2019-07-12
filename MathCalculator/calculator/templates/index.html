@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>
 	<script type="text/javascript" src="{% static 'scripts/latex.js' %}"></script>
 </head>
-<body onload="init()">
+<body onload="init()" id="body">
 	<div class="main">
 		<h1>Advanced Math Calculator</h1>
 		<div class="side-menu">
@@ -114,12 +114,23 @@
 		</div>
 		<div class="main-section">
 			<h2>Home</h2>
-			<form class="equation-form">
-				<input id="equation-input" type="text" placeholder="Enter equation" value="x^2+2x+1"/>
-				<div class="equation-submit-button" onclick="printLatex()">Submit</div>
+			<div class="symbol-container">
+				<div class="symbol-row">
+					<div onclick="insertSymbol(this.id)" id="infty" class="symbol-item">∞</div>					
+					<div onclick="insertSymbol(this.id)" id="pi" class="symbol-item">π</div>
+					<div onclick="insertSymbol(this.id)" id="integral" class="symbol-item">∫</div>
+				</div>
+			</div>
+			<form class="equation-form" method="post">{% csrf_token %}
+				{{ form.as_p }}
+				<div id="equation-input">
+					<textarea tabindex="-1" id="textarea"></textarea><div id="cursor" class="1">|</div></div>
+				<!--<div class="equation-submit-button" onclick="printLatex()">Submit</div>
+				-->
+				<input class="equation-submit-button" type="submit" value="Submit">
 			</form>
-			
-			<div id="equation-display">Sample equation: $x^2+2x+1$</div>
+			<p style="font-size:1.2em; text-align: center;"><strong>Note:</strong> Currently only the evaluation of numerical expressions are supported</p>
+			<div id="equation-display">{{ formattedEquation }}</div>
 		</div>
 		<div style="clear:both;">
 		</div>
