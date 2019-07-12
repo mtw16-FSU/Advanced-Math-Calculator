@@ -24,8 +24,12 @@ def testEquationCalculator(equation):
 	print(equation)	
 	returnString = ""
 	try:
+		#computedExpression = str(eval(equation))
 		returnString = "$" + originalEquation + " = " + str(eval(equation)) + "$"
 	except:
 		returnString = "Error, unable to process the following  equation: $" + originalEquation + "$"
 	
 	return returnString
+
+#def convertToReadable():
+#	pass

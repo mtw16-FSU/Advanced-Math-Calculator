@@ -1,3 +1,6 @@
+moving;
+movement = false;
+
 function init(){
 	var dropdowns = document.getElementsByClassName("dropdown");
 	for(var i = 0; i < dropdowns.length; i++){
@@ -59,12 +62,14 @@ function init(){
 				}
 				break;
 			case 39: //right arrow key
-				//"<span id=''></span>"
 				if(classNum < input.children.length-1){
 					classNum += 1;
 					cursor.className = classNum;
 					movement = true;
 				}
+				break;
+			case 8: //backspace key
+				classNum = removeItem(classNum);
 				break;
 			default:
 				break;
@@ -72,6 +77,7 @@ function init(){
 
 		if(classNum != prevNum && movement){
 			//console.log("Here");
+			//moving = setInterval(moveCursor, 100);
 			moveCursor(classNum);
 		}
 	});
@@ -82,6 +88,11 @@ function init(){
 			//	input.innerHTML = input.innerHTML.substring(0,i) + "<div class='sup'>&nbsp;</div>&nbsp;" + input.innerHTML.substring(i+1,input.innerHTML.length);
 			//}
 		//}
+
+		/*if(movement){
+			clearInterval(moving);
+		}
+		movement = false;*/
 	});
 
 	setInterval(function(){
@@ -103,10 +114,7 @@ function moveCursor(position){
 	//console.log(position);
 	var input = document.getElementById("equation-input");
 	var inputItems = input.children;
-	/*console.log("Start loop");
-	for(var i = 0; i < inputItems.length; i++){
-		console.log("id: " + inputItems[i].id + " class: " + inputItems[i].className);
-	}*/
+
 	for(var i = 1; i < inputItems.length; i++){
 		//console.log(inputItems[i].className);
 		if(inputItems[i].className == position){
@@ -128,38 +136,28 @@ function moveCursor(position){
 			//alert(inputItems[i].innerHTML + ", " + inputItems[i+1].innerHTML);
 		}
 	}
-
-	/*console.log("End loop");
-	for(var i = 0; i < inputItems.length; i++){
-		console.log("id: " + inputItems[i].id + " class: " + inputItems[i].className);
-	}*/
 }
 
-function doGetCaretPosition (oField) {
+function removeItem(position){
+	var input = document.getElementById("equation-input");
+	var inputItems = input.children;
 
-	// Initialize
-	var iCaretPos = 0;
-  
-	// IE Support
-	if (document.selection) {
-  
-	  // Set focus on the element
-	  oField.focus();
-  
-	  // To get cursor position, get empty selection range
-	  var oSel = document.selection.createRange();
-  
-	  // Move selection start to 0 position
-	  oSel.moveStart('character', -oField.innerHTML.length);
-  
-	  // The caret position is selection length
-	  iCaretPos = oSel.text.length;
+	if(position == 1){
+		return position;
 	}
-  
-	// Firefox support
-	else if (oField.selectionStart || oField.selectionStart == '0')
-	  iCaretPos = oField.selectionDirection=='backward' ? oField.selectionStart : oField.selectionEnd;
-  
-	// Return results
-	return iCaretPos;
-  }
+
+	for(var i = 1; i < inputItems.length; i++){
+		if(inputItems[i].className == position){
+			var textarea = document.getElementById("id_textarea");
+			input.removeChild(inputItems[i-1]);
+			textarea.innerHTML = textarea.innerHTML.substring(0,i-2) + textarea.innerHTML.substring(i-1,textarea.innerHTML.length) ;
+				
+			inputItems[i-1].className = i-1;
+			position = i-1;
+			//console.log("position");
+			return position;
+		}
+	}
+
+	return 1; //should never be reached
+}
