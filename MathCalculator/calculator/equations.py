@@ -18,6 +18,11 @@ def testEquationCalculator(equation):
 		if equation[i] == "^":
 			equation = equation[0:i] + "**" + equation[i+1:len(equation)]
 			counter += 1
+		elif equation[i] == "{":
+			equation = equation[0:i] + "(" + equation[i+1:len(equation)]		
+		elif equation[i] == "}":
+			equation = equation[0:i] + ")" + equation[i+1:len(equation)]		
+
 		counter -= 1
 		i += 1
 

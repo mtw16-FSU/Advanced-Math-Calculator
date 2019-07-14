@@ -8,7 +8,9 @@ function printLatex(){
 }
 
 function insertSymbol(symbolID){
-	var input = document.getElementById("equation-input");
+	//cursorCurrentParent
+	//var input = document.getElementById("equation-input");
+	var input = document.getElementById(cursorCurrentParent);
 	var symbol = document.getElementById(symbolID);
 
 	var newNode = document.createElement("div");
@@ -25,9 +27,9 @@ function insertSymbol(symbolID){
 
 
 function insertAtCursor(newNode, character){
-
-	var input = document.getElementById("equation-input");
-	var textarea = document.getElementById("id_textarea");
+//cursorCurrentParent
+	//var input = document.getElementById("equation-input");
+	var input = document.getElementById(cursorCurrentParent);
 	var cursor = document.getElementById("cursor");
 
 	var inputItems = input.children;
@@ -40,9 +42,15 @@ function insertAtCursor(newNode, character){
 				cursor.className = i+1;
 				//console.log("Before");
 				moveCursor(i+1);
-				textarea.innerHTML = textarea.innerHTML.substring(0,i-1) + character + textarea.innerHTML.substring(i-1,textarea.innerHTML.length) ;
 				//console.log("In here: " + textarea.innerHTML);
 				//console.log("After");
+console.log("i+1 = " + inputItems[i+2].id);
+				shiftContainers(i+1, 1);
+				/*if(inputItems[i+2].className == "sup"){
+					inputItems[i+2].id = "sup-" + (i + 1);
+					console.log("HEAYH: " + inputItems[i+2].id);
+				}*/
+
 				found = true;
 				i = inputItems.length;
 				//console.log("i: " + i + " out of " + inputItems.length);
@@ -55,6 +63,37 @@ function insertAtCursor(newNode, character){
 			cursor = document.getElementById("cursor");
 			cursor.className = inputItems.length-1;
 			moveCursor(inputItems.length-1);
-			textarea.innerHTML += character;
 		}
+
+		interpretEquation();
+}
+
+
+function interpretEquation(){
+	var input = document.getElementById("equation-input");
+	var inputItems = input.children;
+
+	var temp = "";
+
+	for(var i = 0; i < inputItems.length; i++){
+		if(inputItems[i].id == "cursor"){
+
+		}else if(inputItems[i].className == "sup"){
+			temp += "^{";
+			smallerChildren = inputItems[i].children;
+			for(var j = 0; j < smallerChildren.length; j++){
+				if(smallerChildren[j].id != "cursor"){
+					temp += smallerChildren[j].textContent;
+				}
+			}
+			temp += "}";
+		}else{
+			temp += inputItems[i].textContent;
+		}
+	}
+
+	var textarea = document.getElementById("id_textarea");
+	textarea.innerHTML = temp;
+
+	//console.log(temp);
 }

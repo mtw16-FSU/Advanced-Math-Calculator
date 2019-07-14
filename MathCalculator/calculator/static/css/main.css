@@ -196,6 +196,12 @@ cursor:pointer;
 .sup{
 	display:inline;
 	vertical-align:super;
+	/*border:1px solid red;*/
+	padding:0 2px;
+}
+
+.sup-hidden{
+	display:none;
 }
 
 .sup:focus{
