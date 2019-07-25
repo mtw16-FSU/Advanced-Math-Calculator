@@ -14,10 +14,17 @@ function insertSymbol(symbolID){
 	var symbol = document.getElementById(symbolID);
 
 	var newNode = document.createElement("div");
-	var newContent = document.createTextNode(symbol.innerHTML);
 
-	newNode.className = "input-item";
-	newNode.appendChild(newContent);
+	if(symbolID == "frac"){
+		var cursorLocation = document.getElementById("cursor").className;
+		newNode.className = "fraction";
+		newNode.id = "frac-" + cursorLocation;
+		newNode.innerHTML = "<div id='num-" + cursorLocation + "' class='numerator empty'><div class='input-item'>&nbsp;</div></div><div id='den-" + cursorLocation + "'class='denominator empty'><div class='input-item'>&nbsp;</div></div>";
+	}else{
+		newNode.className = "input-item";
+		newNode.innerHTML = symbol.innerHTML;
+	}
+	//newNode.appendChild(newContent);
 
 	insertAtCursor(newNode, symbol.innerHTML);
 
@@ -44,7 +51,7 @@ function insertAtCursor(newNode, character){
 				moveCursor(i+1);
 				//console.log("In here: " + textarea.innerHTML);
 				//console.log("After");
-console.log("i+1 = " + inputItems[i+2].id);
+//console.log("i+1 = " + inputItems[i+2].id);
 				shiftContainers(i+1, 1);
 				/*if(inputItems[i+2].className == "sup"){
 					inputItems[i+2].id = "sup-" + (i + 1);
@@ -63,6 +70,11 @@ console.log("i+1 = " + inputItems[i+2].id);
 			cursor = document.getElementById("cursor");
 			cursor.className = inputItems.length-1;
 			moveCursor(inputItems.length-1);
+		}
+
+		if(document.getElementById(cursorCurrentParent).parentElement.className == "fraction" && document.getElementById(cursorCurrentParent).children.length > 2){
+			//console.log("INSERT IN NUM OR DENOM");
+			document.getElementById(cursorCurrentParent).className = (document.getElementById(cursorCurrentParent).className.substring(0,9) == "numerator") ? "numerator" : "denominator";
 		}
 
 		interpretEquation();
@@ -87,6 +99,22 @@ function interpretEquation(){
 				}
 			}
 			temp += "}";
+		}else if(inputItems[i].className == "fraction"){
+			temp += "(";
+			numeratorChildren = inputItems[i].children[0].children;
+			for(var j = 1; j < numeratorChildren.length; j++){
+				if(numeratorChildren[j].id != "cursor"){
+					temp += numeratorChildren[j].textContent;
+				}
+			}
+			temp += ")/(";
+			denominatorChildren = inputItems[i].children[1].children;
+			for(var j = 1; j < denominatorChildren.length; j++){
+				if(denominatorChildren[j].id != "cursor"){
+					temp += denominatorChildren[j].textContent;
+				}
+			}
+			temp += ")";
 		}else{
 			temp += inputItems[i].textContent;
 		}

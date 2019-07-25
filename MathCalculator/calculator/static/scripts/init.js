@@ -3,6 +3,26 @@ movement = false;
 //numBoxes = 0;
 cursorCurrentParent = "equation-input";
 
+function initAlt(id){
+	var dropdowns = document.getElementsByClassName("dropdown");
+	for(var i = 0; i < dropdowns.length; i++){
+		dropdowns[i].onclick = function(){
+			if(this.style.transform == "rotate(90deg)"){
+				this.style.transform = "rotate(0deg)";
+				this.nextElementSibling.nextElementSibling.style.display = "none";
+			}else{
+				this.style.transform = "rotate(90deg)";
+				this.nextElementSibling.nextElementSibling.style.display = "block";
+			}
+		}
+	}
+
+	var menu = document.getElementById(id);
+	menu.style.color = "#fff000";
+	menu.previousElementSibling.style.transform = "rotate(90deg)";
+	menu.nextElementSibling.style.display = "block";
+}
+
 function init(){
 	var dropdowns = document.getElementsByClassName("dropdown");
 	for(var i = 0; i < dropdowns.length; i++){
@@ -93,19 +113,6 @@ function init(){
 		}
 	});
 
-	input.addEventListener("keyup", function(event){
-		//for(var i = 0; i < input.innerHTML.length; i++){
-			//if(input.innerHTML[i] == '^'){
-			//	input.innerHTML = input.innerHTML.substring(0,i) + "<div class='sup'>&nbsp;</div>&nbsp;" + input.innerHTML.substring(i+1,input.innerHTML.length);
-			//}
-		//}
-
-		/*if(movement){
-			clearInterval(moving);
-		}
-		movement = false;*/
-	});
-
 	setInterval(function(){
 		cursor = document.getElementById("cursor");
 		if(cursor.style.opacity == 0){
@@ -133,8 +140,32 @@ function moveCursor(position){
 	console.log(input.id);
 	var inputItems = input.children;
 
+	if(cursorCurrentParent.substring(0,3) == "num" && position >= inputItems.length){
+		cursorCurrentParent = "den-" + cursorCurrentParent.substring(4,cursorCurrentParent.length);
+		console.log("numerator switch: " + cursorCurrentParent);
 
-	if(position < 1 || position >= inputItems.length){
+		newInputItems = document.getElementById(cursorCurrentParent).parentElement.children[1];
+		newPosition = 1;
+		cursorPosition = (position < 1) ? 1 : inputItems.length - 1;
+
+		//console.log();
+		newInputItems.insertBefore(inputItems[cursorPosition], newInputItems.children[newPosition]);
+		var cursor = document.getElementById("cursor");
+		cursor.className = newPosition;		
+
+	}else if(cursorCurrentParent.substring(0,3) == "den" && position < 1){
+		cursorCurrentParent = "num-" + cursorCurrentParent.substring(4,cursorCurrentParent.length);
+
+		newInputItems = document.getElementById(cursorCurrentParent).parentElement.children[0];
+		newPosition = newInputItems.children.length;
+		cursorPosition = 1;
+
+		console.log("Heyah: " + newPosition);
+		newInputItems.appendChild(inputItems[cursorPosition]);
+		var cursor = document.getElementById("cursor");
+		cursor.className = newPosition;		
+
+	}else if(position < 1 || position >= inputItems.length){
 		cursorCurrentParent = "equation-input";
 		newInputItems = document.getElementById(cursorCurrentParent);
 		newPosition = Number(input.id.substring(4,input.id.length));
@@ -142,7 +173,9 @@ function moveCursor(position){
 		newPosition = (position < 1) ? newPosition : newPosition+1;
 		cursorPosition = (position < 1) ? 1 : inputItems.length - 1;
 
-		input.style.border = "none";
+		if(input.className == "sup"){
+			input.style.border = "none";
+		}
 
 		newInputItems.insertBefore(inputItems[cursorPosition], newInputItems.children[newPosition]);
 		//console.log("new cursor pos: " + input.id.substring(4,input.id.length));
@@ -155,7 +188,7 @@ function moveCursor(position){
 	for(var i = 1; i < inputItems.length; i++){
 		//console.log(inputItems[i].className);		
 		changeAmount = (moveBack) ? -1 : 1;
-		if(inputItems[i].className == position && inputItems[i + changeAmount].className == "sup"){
+		if(inputItems[i].className == position && inputItems[i + changeAmount].className == "sup"){ //exponentials
 			inputItems[i].className = (!moveBack) ? "1" : inputItems[i+changeAmount].children.length;
 			//console.log(inputItems[i].className + ", " + inputItems[i+changeAmount].children.length);
 			if(moveBack){
@@ -179,6 +212,30 @@ function moveCursor(position){
 
 			i = inputItems.length;
 			//input.removeChild(inputItems[i]);
+		}else if(inputItems[i].className == position && inputItems[i + changeAmount].className == "fraction"){ //fraction
+			console.log("Should go into numerator");
+			numChild = (!moveBack) ? 0 : 1;
+			inputItems[i].className = (!moveBack) ? "1" : inputItems[i+changeAmount].children[numChild].children.length;
+
+			if(moveBack){
+				inputItems[i+changeAmount].children[numChild].appendChild(inputItems[i]);
+			}else{
+				if(inputItems[i+changeAmount].children[numChild].children.length <= 1){
+					inputItems[i+changeAmount].children[numChild].appendChild(inputItems[i]);
+				}else{
+					inputItems[i+changeAmount].children[numChild].insertBefore(inputItems[i], inputItems[i+changeAmount].children[numChild].children[1]);
+				}
+			}
+
+			smallOffset = (moveBack) ? -1 : 0;
+
+			cursorCurrentParent = inputItems[i+smallOffset].children[numChild].id;
+			//inputItems[i+smallOffset].style.border = "2px solid darkgreen";
+			console.log(inputItems[i+smallOffset].children[numChild].className);
+			console.log("new id: " +cursorCurrentParent);
+			newId = true;
+
+			i = inputItems.length;
 		}else if(inputItems[i].className == position){
 			
 			var tempContent = inputItems[i].innerHTML;
@@ -228,6 +285,10 @@ function removeItem(position){
 				if(inputItems[i].className == "sup"){
 					//console.log("SKREEEE");
 					inputItems[i].id = "sup-" + (i-1);
+				}else if(inputItems[i].className == "fraction"){
+					inputItems[i].id = "frac-" + (i-1);
+					inputItems[i].children[0].id = "num-" + (i-1);
+					inputItems[i].children[1].id = "den-" + (i-1);
 				}
 			}
 
@@ -249,6 +310,12 @@ function shiftContainers(position, direction){
 			newPosition += direction;
 			inputItems[i].id = "sup-" + newPosition;
 			console.log("INNNNN");
+		}else if(inputItems[i].className == "fraction"){
+			newPosition = Number(inputItems[i].id.substring(5,inputItems[i].id.length));
+			newPosition += direction;
+			inputItems[i].id = "frac-" + newPosition;
+			inputItems[i].children[0].id = "num-" + newPosition;
+			inputItems[i].children[1].id = "den-" + newPosition;
 		}
 	}
 }

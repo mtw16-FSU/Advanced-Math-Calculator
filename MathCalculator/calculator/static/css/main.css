@@ -26,7 +26,7 @@ body{
 	font-family: 'Concert One', cursive;
 	font-size:3em;
 	text-align:center;
-	padding:30px 0;
+	padding:30px 0 70px 0;
 }
 
 .side-menu{
@@ -66,9 +66,16 @@ body{
 	width:75%;
 }
 
+
 .main-section p{
 	padding:15px 50px;
 	line-height:2;
+}
+
+.main-section ul{
+	display: block;
+	width: 50%;
+	margin: auto;
 }
 
 .equation-form{
@@ -208,6 +215,28 @@ cursor:pointer;
 	border:1px solid blue;
 }
 
+.fraction{
+	display: inline-block;
+	position:relative;
+	text-align: center;
+	padding:0 2px;
+	vertical-align: bottom;
+}
+
+.numerator{
+	display:inherit;
+	width:100%;
+}
+
+.denominator{
+	display:block;
+	width:100%;
+	float:left;
+	left:0;
+	top:25px;
+	border-top: 2px solid black;
+}
+
 #textarea{
 	position: absolute;
     width: 100%;
@@ -215,11 +244,6 @@ cursor:pointer;
     height: 100%;
 	top: 0;
 	opacity:0;
-	/*overflow:hidden;
-	max-width:100%;
-	resize:none;
-	padding: 5px 10px;
-	font-size:1.2em;*/
 }
 
 #cursor{
@@ -229,4 +253,16 @@ cursor:pointer;
 
 .equation-form > p{
 	display:none;
+}
+
+.empty{
+	box-shadow:0 0 2px red;
+	padding:0 2px;
+	background-color: #ffffee;
+}
+
+#frac{
+	font-size:.6em;
+	padding-top: 15px;
+	padding-bottom: 7px;
 }

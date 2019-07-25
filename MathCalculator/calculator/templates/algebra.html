@@ -13,23 +13,23 @@
 	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>
 	<script type="text/javascript" src="{% static 'scripts/latex.js' %}"></script>
 </head>
-<body onload="init()" id="body">
+<body onload="initAlt('algebra-menu')" id="body">
 	<div class="main">
 		<h1>Advanced Math Calculator</h1>
 		{% include "menu.html" %}
 		<div class="main-section">
-			<h2>Home</h2>			
-			{% include "symbol-bar1.html" %}
-			<form class="equation-form" method="post">{% csrf_token %}
-				{{ form.as_p }}
-				<div id="equation-input">
-					<textarea tabindex="-1" id="textarea"></textarea><div id="cursor" class="1">|</div></div>
-				<!--<div class="equation-submit-button" onclick="printLatex()">Submit</div>
-				-->
-				<input class="equation-submit-button" type="submit" value="Submit">
-			</form>
-			<p style="font-size:1.2em; text-align: center; word-wrap:break-word;"><strong>Note:</strong> Currently only the evaluation of numerical expressions are supported</p>
-			<div id="equation-display">{{ formattedEquation }}</div>
+			<h2>Algebra</h2>
+			<p>
+				See the following:
+			</p>
+
+			<ul>
+				<li>Equations</li>
+				<li>Find Slope, y-offset, x-offset</li>
+				<li>Graph Equations</li>
+				<li>Function Composition</li>
+				<li>Partial Fraction Decomposition</li>
+			</ul>
 		</div>
 		<div style="clear:both;">
 		</div>
