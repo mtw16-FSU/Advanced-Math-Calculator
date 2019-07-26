@@ -359,3 +359,13 @@ def linear_algebra_info_LI(request):
     
 def geometry(request):
 	return render(request, "geometry.html")
+
+def geometry_area(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+    else:
+        form = MathForm()
+    return render(request, "area.html", {"form": form, "formattedEquation": formattedEquation})
