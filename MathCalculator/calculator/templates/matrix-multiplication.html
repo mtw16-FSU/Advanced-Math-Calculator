@@ -13,20 +13,15 @@
 	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/latex.js' %}"></script>
 </head>
-<body onload="init(); initAlt('derivatives-menu'); document.getElementById('calculus-menu').nextElementSibling.style.display = 'block'; document.getElementById('derivatives-menu').style.color = '#ffffff'; document.getElementById('derivatives-standard-menu').style.color = '#fff000'; " id="body">
+<body onload="init(); initAlt('matrix-ops-menu'); document.getElementById('linear-algebra-menu').nextElementSibling.style.display = 'block'; document.getElementById('matrix-ops-menu').style.color = '#ffffff'; document.getElementById('matrix-multiplication-menu').style.color = '#fff000'; " id="body">
 	<div class="main">
 		<h1>Advanced Math Calculator</h1>
 		{% include "menu.html" %}
 		<div class="main-section">
-			<h2>Standard Derivatives</h2>
-			{% include "symbol-bar-derivatives-standard.html" %}
+			<h2>Matrix Multiplication</h2>
+			{% include "symbol-bar-equations-solve.html" %}
 			<form class="equation-form" method="post">{% csrf_token %}
 				{{ form.as_p }}
-				<div class="derivative-container">
-					<span>Enter variable you are taking the derivative of (ex. enter x for d/dx):</span>
-					<textarea id="derivative-variable" oninput="validateDerivativeVariable()"></textarea>
-					<div id="derivative-error"></div>
-				</div>
 				<div id="equation-input">
 					<textarea tabindex="-1" id="textarea"></textarea><div id="cursor" class="1">|</div></div>
 				<input class="equation-submit-button" type="submit" value="Submit">

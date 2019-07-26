@@ -14,3 +14,13 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.textarea
+
+class DerivativePost(models.Model):
+	text = models.TextField()
+	textarea = models.TextField()
+
+	def publish(self):
+		self.save()
+
+	def __str__(self):
+		return self.textarea

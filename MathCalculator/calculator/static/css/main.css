@@ -234,7 +234,7 @@ cursor:pointer;
 	float:left;
 	left:0;
 	top:25px;
-	border-top: 2px solid black;
+	border-top: 2px solid darkgreen;
 }
 
 #textarea{
@@ -266,3 +266,81 @@ cursor:pointer;
 	padding-top: 15px;
 	padding-bottom: 7px;
 }
+
+.derivative-container, .container{
+	text-align: center;
+    display: block;
+    padding: 30px 0;
+}
+
+#derivative-variable, .container-field{
+	resize: none;
+    text-align: center;
+	padding: 10px 5px 3px 5px;
+	height:25px;
+	width:25px;
+	vertical-align: middle;
+	border:2px solid darkgreen;
+}
+
+#num-rows, #num-cols{
+	width:40px;
+	overflow:hidden;
+}
+
+#derivative-error{
+	color:red;
+	text-align: center;
+	display:block;
+	margin: auto;
+	padding-top:15px;
+}
+
+.error{
+	border:2px solid darkred !important;
+	box-shadow: 0 0 5px red;
+}
+
+.matrix{
+	display:block;
+	margin:auto;
+}
+
+.row{
+
+}
+
+tbody{
+	display:block;
+	margin: auto;
+	text-align: -webkit-center;
+}
+
+.column > textarea{
+	border:2px solid green;
+	resize: none;
+	overflow: hidden;
+	text-align: center;
+	width:60px;
+	padding-top:20px;
+	font-size:1.2em;
+}
+
+#matrix-1, #matrix-2{
+	float:left;
+	width:45%;
+}
+
+#matrix-operation{
+	float: left;
+	width:10%;
+	display: block;
+	text-align: center;
+	background-color: white;
+	border:2px solid darkgreen;
+}
+
+#matrix-operation option:hover{
+	background-color: red;
+}
+

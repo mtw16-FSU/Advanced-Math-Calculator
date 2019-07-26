@@ -78,6 +78,40 @@ def solveForVariable(equation):
 	
 	return returnString
 
+def standardDerivative(equation, variable):
+#	for x in equation:
+#		if variable == x:
+#			found = True
+	formattedEquation = formatInput(equation)
+	equalsLocation = -1
+
+	for i in range(0, len(formattedEquation)):
+		if formattedEquation[i] == "=":
+			equalsLocation = i
+	try:
+		if equalsLocation != -1:
+			print("There is an equals!")
+			temp1 = formattedEquation[0:equalsLocation]
+			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
+			temp1 = str(sp.diff(temp1, variable))
+			temp2 = str(sp.diff(temp2, variable))
+			returnString = temp1 + "=" + temp2
+			returnString = formatLaTex(returnString)
+		else:
+			returnString = str(sp.diff(formattedEquation, variable))
+			print("deriv:", returnString)
+			returnString = formatLaTex(returnString)
+
+		found = returnString.find("log(e)")
+		while found != -1:
+			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
+			found = returnString.find("log(e)")
+	except:
+		returnString = "Unable to take derivative of: " + formatLaTex(formattedEquation)
+	
+	return returnString
+
+
 def getVariables(equation):
 	variables = []
 	for x in equation:
@@ -150,6 +184,7 @@ def getReversedValues(equation):
 def parseTerms(equation):
 	terms = []
 	currentTerm = ""
+	print("pt:",equation)
 	for i in range(0,len(equation)):
 		if isOperator(equation[i]):
 			if currentTerm == "":
@@ -178,7 +213,7 @@ def isOperator(character):
 
 def formatLaTex(equation):
 	terms = parseTerms(equation)
-	print("inside format latex")
+	#print("inside format latex")
 	for i in range(0,len(terms)):
 		print(i)
 		if terms[i] == "sqrt":
@@ -201,11 +236,14 @@ def formatLaTex(equation):
 			terms[i] = "{\pi}"
 		elif terms[i] == "*":
 			if terms[i+1] == "*":
+				numRightParenthesis = 1 if terms[i+2] == "(" else 0
+				#print("POwer:",terms[i+2])
 				terms[i] = "^"
 				terms[i+1] = "{"
-				terms[i+2] = ""
+				if numRightParenthesis == 1:
+					terms[i+2] = ""
 				i += 2
-				numRightParenthesis = 1
+				#numRightParenthesis = 1
 				oldPosition = i
 				while numRightParenthesis > 0:
 					i += 1
@@ -213,8 +251,12 @@ def formatLaTex(equation):
 						numRightParenthesis -= 1
 					elif terms[i] == "(":
 						numRightParenthesis += 1
-				terms[i] = "}"
-				i = oldPosition
+				if i == oldPosition:
+					terms[i-1] = terms[i]
+					terms[i] = ""
+				else:
+					terms[i] = "}"
+					i = oldPosition
 			elif terms[i + 1].isalpha():
 				terms[i] = ""
 

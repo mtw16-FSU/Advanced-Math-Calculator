@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import MathForm
+from .forms import DerivativeForm
 
 from .equations import *
 #from equations import testEquationCalculator
@@ -106,11 +107,12 @@ def calculus_derivatives(request):
 def calculus_derivatives_standard(request):
 	formattedEquation = ""
 	if request.method == "POST":
-		form = MathForm(request.POST)
+		form = DerivativeForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = standardDerivative(form.cleaned_data["textarea"], form.cleaned_data["text"])
+			#formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
 	else:
-		form = MathForm()
+		form = DerivativeForm()
 	return render(request, "derivatives-standard.html", {"form": form, "formattedEquation": formattedEquation})
 
 def calculus_derivatives_partial(request):
@@ -150,6 +152,37 @@ def calculus_integrals_definite(request):
 def calculus_graphical(request):
 	return render(request, "graphical.html")
 
+def calculus_graphical_arc_length(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "arc-length.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def calculus_graphical_tangent_line(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "tangent-line.html", {"form": form, "formattedEquation": formattedEquation})
+
+def calculus_graphical_critical_points(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "critical-points.html", {"form": form, "formattedEquation": formattedEquation})
+
+
 def calculus_limits(request):
 	formattedEquation = ""
 	if request.method == "POST":
@@ -159,3 +192,164 @@ def calculus_limits(request):
 	else:
 		form = MathForm()
 	return render(request, "limits.html", {"form": form, "formattedEquation": formattedEquation})
+
+def ODE(request):
+	return render(request, "ODE.html")
+
+def ODE_first(request):
+	return render(request, "ODE-first.html")
+    
+def ODE_first_linear(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "ODE-first-linear.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def ODE_first_separable(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "ODE-first-separable.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def ODE_first_exact(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "ODE-first-exact.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def ODE_first_euler(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "ODE-first-euler.html", {"form": form, "formattedEquation": formattedEquation})
+
+def ODE_second(request):
+	return render(request, "ODE-second.html")
+    
+def ODE_second_homogenous(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "ODE-second-homogenous.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra(request):
+	return render(request, "linear-algebra.html")
+
+def linear_algebra_matrix_ops(request):
+	return render(request, "matrix-ops.html")
+    
+def linear_algebra_matrix_ops_multiplication(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-multiplication.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_matrix_ops_addition(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-addition.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_matrix_ops_equation(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-equation.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_system(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-system.html", {"form": form, "formattedEquation": formattedEquation})
+
+def linear_algebra_info(request):
+	return render(request, "matrix-info.html")
+    
+def linear_algebra_info_RREF(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-RREF.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_info_determinant(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-determinant.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_info_transpose(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-transpose.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_info_inverse(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-inverse.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def linear_algebra_info_LI(request):
+	formattedEquation = ""
+	if request.method == "POST":
+		form = MathForm(request.POST)
+		if form.is_valid():
+			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+	else:
+		form = MathForm()
+	return render(request, "matrix-LI.html", {"form": form, "formattedEquation": formattedEquation})
+    
+def geometry(request):
+	return render(request, "geometry.html")
