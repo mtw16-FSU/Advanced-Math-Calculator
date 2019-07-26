@@ -338,7 +338,11 @@ function validateDerivativeVariable(term){
 		variable.className = "";
 	}
 
-	document.getElementById("id_text").innerHTML = variable.value;
+	if(term == "definite integral"){
+		document.getElementById("id_text").innerHTML = variable.value + "?" + document.getElementById("upper-limit").value + "?" + document.getElementById("lower-limit").value;
+	}else{
+		document.getElementById("id_text").innerHTML = variable.value;
+	}
 }
 
 function updateRows(elem){
@@ -470,4 +474,8 @@ function copyFieldsToMatrix(matrix){
 	console.log("Matrix [0,2]:" + a[0][2]);
 	console.log("Matrix [1,0]:" + a[1][0]);*/
 	return copyMatrix;
+}
+
+function updateLimits(){
+	document.getElementById("id_text").innerHTML = document.getElementById("derivative-variable").value + "?" + document.getElementById("upper-limit").value + "?" + document.getElementById("lower-limit").value;
 }

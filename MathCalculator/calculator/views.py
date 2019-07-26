@@ -141,11 +141,11 @@ def calculus_integrals_indefinite(request):
 def calculus_integrals_definite(request):
 	formattedEquation = ""
 	if request.method == "POST":
-		form = MathForm(request.POST)
+		form = DerivativeForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = definiteIntegral(form.cleaned_data["textarea"], form.cleaned_data["text"])
 	else:
-		form = MathForm()
+		form = DerivativeForm()
 	return render(request, "integrals-definite.html", {"form": form, "formattedEquation": formattedEquation})
 
 def calculus_graphical(request):

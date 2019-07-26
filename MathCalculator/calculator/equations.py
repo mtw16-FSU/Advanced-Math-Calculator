@@ -151,6 +151,51 @@ def indefiniteIntegral(equation, variable):
 	
 	return returnString
 
+def definiteIntegral(equation, variable):
+	formattedEquation = formatInput(equation)
+	equalsLocation = -1
+
+	index = variable.find("?")
+	higherIndex = variable.find("?", index+1)
+	lowerLimit = variable[index+1:higherIndex]
+	upperLimit = variable[higherIndex+1:len(variable)]
+	variable = variable[0:index]
+
+	print("Upper limit:", upperLimit)
+	print("Lower limit:", lowerLimit)
+	print("Variable:", variable)
+
+	sp.var(variable)
+	variable = sp.Symbol(variable)	
+
+	for i in range(0, len(formattedEquation)):
+		if formattedEquation[i] == "=":
+			equalsLocation = i
+	#if 2 == 2:
+	try:
+		print("Just before deriv:",formattedEquation,"variable:",variable)
+		if equalsLocation != -1:
+			print("There is an equals!")
+			temp1 = formattedEquation[0:equalsLocation]
+			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
+			temp1 = str(sp.integrate(temp1, (variable,upperLimit, lowerLimit)))
+			temp2 = str(sp.integrate(temp2, (variable,upperLimit, lowerLimit)))
+			returnString = temp1 + "=" + temp2
+			returnString = formatLaTex(returnString)
+		else:
+			returnString = str(sp.integrate(formattedEquation, (variable, upperLimit, lowerLimit)))
+			print("deriv:", returnString)
+			returnString = formatLaTex(returnString)
+
+		found = returnString.find("log(e)")
+		while found != -1:
+			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
+			found = returnString.find("log(e)")
+	except:
+		returnString = "Unable to take integral of: " + formatLaTex(formattedEquation)
+	
+	return returnString
+
 
 def ODESolver(equation, variable):
 	formattedEquation = formatInput(equation)

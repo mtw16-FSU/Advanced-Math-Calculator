@@ -286,11 +286,15 @@ cursor:pointer;
 	font-size:1em;
 }
 
-#num-rows, #num-cols{
+#num-rows, #num-cols, #upper-limit, #lower-limit{
 	width:40px;
 	overflow:hidden;
 	color:#006400;
 	font-size:1em;
+}
+
+#upper-limit, #lower-limit{
+	width:120px;
 }
 
 #derivative-error{
