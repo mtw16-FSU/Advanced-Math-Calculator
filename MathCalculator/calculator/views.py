@@ -359,3 +359,72 @@ def linear_algebra_info_LI(request):
     
 def geometry(request):
 	return render(request, "geometry.html")
+
+def geometry_Area(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+    else:
+        form = MathForm()
+    return render(request, "Area.html", {"form": form, "formattedEquation": formattedEquation})
+
+
+def geometry_Perimeter(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+        else:
+            form = MathForm()
+        return render(request, "perimeter.html", {"form": form, "formattedEquation": formattedEquation})
+
+def geometry_Triangles(request):
+    return render(request, "Triangles.html", {"form": form, "formattedEquation": formattedEquation})
+
+def geometry_Triangles_missingLen(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = solveForVariable(form.cleaned_data["textarea"])
+    else:
+        form = MathForm()
+    return render(request, "missingLen.html", {"form": form, "formattedEquation": formattedEquation})
+
+
+def geometry_Triangles_missingAng(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = solveForVariable(form.cleaned_data["textarea"])
+    else:
+        form = MathForm()
+    return render(request, "missingAng.html", {"form": form, "formattedEquation": formattedEquation})
+
+def geometry_Triangles_compareTri(request):
+    formattedEquation =	""
+    if request.method == "POST":
+	form = MathForm(request.POST)
+	if form.is_valid():
+            pass
+    else:
+            form = MathForm()
+    return render(request, "compareTri.html", {"form": form, "formattedEquation": formattedEquation})
+
+
+def geometry_arclength_circle(request):
+    formattedEquation = ""
+    if request.method == "POST":
+        form = MathForm(request.POST)
+        if form.is_valid():
+            formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+        else:
+            form = MathForm()
+        return render(request, "arclength-circle.html", {"form": form, "formattedEquation": formattedEquation})
+
+
+
