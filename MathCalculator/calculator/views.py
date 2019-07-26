@@ -110,7 +110,6 @@ def calculus_derivatives_standard(request):
 		form = DerivativeForm(request.POST)
 		if form.is_valid():
 			formattedEquation = standardDerivative(form.cleaned_data["textarea"], form.cleaned_data["text"])
-			#formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
 	else:
 		form = DerivativeForm()
 	return render(request, "derivatives-standard.html", {"form": form, "formattedEquation": formattedEquation})
@@ -132,11 +131,11 @@ def calculus_integrals(request):
 def calculus_integrals_indefinite(request):
 	formattedEquation = ""
 	if request.method == "POST":
-		form = MathForm(request.POST)
+		form = DerivativeForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = indefiniteIntegral(form.cleaned_data["textarea"], form.cleaned_data["text"])
 	else:
-		form = MathForm()
+		form = DerivativeForm()
 	return render(request, "integrals-indefinite.html", {"form": form, "formattedEquation": formattedEquation})
 
 def calculus_integrals_definite(request):
@@ -197,16 +196,23 @@ def ODE(request):
 	return render(request, "ODE.html")
 
 def ODE_first(request):
-	return render(request, "ODE-first.html")
+	formattedEquation = ""
+	if request.method == "POST":
+		form = DerivativeForm(request.POST)
+		if form.is_valid():
+			formattedEquation = ODESolver(form.cleaned_data["textarea"], form.cleaned_data["text"])
+	else:
+		form = DerivativeForm()
+	return render(request, "ODE-first.html", {"form": form, "formattedEquation": formattedEquation})
     
 def ODE_first_linear(request):
 	formattedEquation = ""
 	if request.method == "POST":
-		form = MathForm(request.POST)
+		form = DerivativeForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = ODESolver(form.cleaned_data["textarea"], form.cleaned_data["text"])
 	else:
-		form = MathForm()
+		form = DerivativeForm()
 	return render(request, "ODE-first-linear.html", {"form": form, "formattedEquation": formattedEquation})
     
 def ODE_first_separable(request):

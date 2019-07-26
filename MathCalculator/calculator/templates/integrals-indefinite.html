@@ -19,9 +19,14 @@
 		{% include "menu.html" %}
 		<div class="main-section">
 			<h2>Indefinite Integrals</h2>
-			{% include "symbol-bar-systems.html" %}
+			{% include "symbol-bar-indefinite-integral.html" %}
 			<form class="equation-form" method="post">{% csrf_token %}
 				{{ form.as_p }}
+				<div class="derivative-container">
+						<span>Enter variable you are taking the integral of (ex. enter x for <span class="integral">∫</span>xdx):</span>
+						<textarea id="derivative-variable" oninput="validateDerivativeVariable('integral')"></textarea>
+						<div id="derivative-error"></div>
+					</div>
 				<div id="equation-input">
 					<textarea tabindex="-1" id="textarea"></textarea><div id="cursor" class="1">|</div></div>
 				<input class="equation-submit-button" type="submit" value="Submit">

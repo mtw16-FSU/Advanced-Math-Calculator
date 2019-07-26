@@ -84,11 +84,15 @@ def standardDerivative(equation, variable):
 #			found = True
 	formattedEquation = formatInput(equation)
 	equalsLocation = -1
+	
+	sp.var(variable)
+	variable = sp.Symbol(variable)	
 
 	for i in range(0, len(formattedEquation)):
 		if formattedEquation[i] == "=":
 			equalsLocation = i
 	try:
+		print("Just before deriv:",formattedEquation)
 		if equalsLocation != -1:
 			print("There is an equals!")
 			temp1 = formattedEquation[0:equalsLocation]
@@ -111,6 +115,133 @@ def standardDerivative(equation, variable):
 	
 	return returnString
 
+def indefiniteIntegral(equation, variable):
+	formattedEquation = formatInput(equation)
+	equalsLocation = -1
+
+
+	sp.var(variable)
+	variable = sp.Symbol(variable)	
+
+	for i in range(0, len(formattedEquation)):
+		if formattedEquation[i] == "=":
+			equalsLocation = i
+	#if 2 == 2:
+	try:
+		print("Just before deriv:",formattedEquation,"variable:",variable)
+		if equalsLocation != -1:
+			print("There is an equals!")
+			temp1 = formattedEquation[0:equalsLocation]
+			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
+			temp1 = str(sp.integrate(temp1, variable))
+			temp2 = str(sp.integrate(temp2, variable))
+			returnString = temp1 + "=" + temp2
+			returnString = formatLaTex(returnString)
+		else:
+			returnString = str(sp.integrate(formattedEquation, variable))
+			print("deriv:", returnString)
+			returnString = formatLaTex(returnString) + "$ + C$"
+
+		found = returnString.find("log(e)")
+		while found != -1:
+			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
+			found = returnString.find("log(e)")
+	except:
+		returnString = "Unable to take integral of: " + formatLaTex(formattedEquation)
+	
+	return returnString
+
+
+def ODESolver(equation, variable):
+	formattedEquation = formatInput(equation)
+	equalsLocation = -1
+	
+	f = sp.Function("f")	
+
+	index = formattedEquation.find(variable)
+	while index != -1:
+		formattedEquation = formattedEquation[0:index] + "f(" + variable + ")"  + formattedEquation[index+1:len(formattedEquation)]
+		index = formattedEquation.find(variable, index + 3)
+		
+	
+	index = formattedEquation.find("\'\'")
+	while index != -1:
+		formattedEquation = formattedEquation[0:index] + ".diff(" + variable + ",2)"  + formattedEquation[index+2:len(formattedEquation)]
+		index = formattedEquation.find("\'\'", index + 1)
+	
+	index = formattedEquation.find("\'")
+	while index != -1:
+		formattedEquation = formattedEquation[0:index] + ".diff()"  + formattedEquation[index+1:len(formattedEquation)]
+		index = formattedEquation.find("\'", index + 1)
+
+	print("function version:",formattedEquation)
+	
+	variables = getVariables(formattedEquation)
+	print("variables:",variables)
+	
+	for v in variables:
+		sp.var(v)
+	
+	sp.var(variable)
+	variable = sp.sympify("f(" + variable + ")")	
+		
+	for i in range(0, len(formattedEquation)):
+		if formattedEquation[i] == "=":
+			equalsLocation = i
+	#if 2 == 2:
+	try:
+		print("Just before deriv:",formattedEquation,"variable:",variable)
+		if equalsLocation != -1:
+			temp1 = formattedEquation[0:equalsLocation]
+			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
+			temp1 = str(sp.dsolve(temp1, variable))
+			temp2 = str(sp.dsolve(temp2, variable))
+			returnString = temp1 + "=" + temp2
+			returnString = formatLaTex(returnString)
+		else:
+			formattedEquation = sp.sympify(formattedEquation)
+			returnString = str(sp.dsolve(formattedEquation, variable))
+			print("deriv:", returnString)
+			returnString = formatLaTex(returnString)
+
+		found = returnString.find("log(e)")
+		while found != -1:
+			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
+			found = returnString.find("log(e)")
+
+		
+		index = returnString.find(",")
+		if index != -1:
+			returnString = str(variable) + " = " + returnString[index+2:len(returnString)-2]
+
+		index = returnString.find("exp")
+		while index != -1:
+			returnString = returnString[0:index] + "e^" + returnString[index+3:len(returnString)]
+			print("Bad 1:",returnString)
+			if returnString[index+2] == "(":
+				print("Bad inside:",returnString)
+				index += 2
+				returnString = returnString[0:index] + "{" + returnString[index+1:len(returnString)]
+				print("Bad middle:",returnString)
+				numRightParenthesis = 1
+				oldPosition = index
+				print("Bad:",returnString)
+				while numRightParenthesis > 0:
+					index += 1
+					if returnString[index] == ")":
+						numRightParenthesis -= 1
+					elif returnString[index] == "(":
+						numRightParenthesis += 1
+				returnString = returnString[0:index] + "}" + returnString[index+1:len(returnString)]
+			index = returnString.find("exp", index)
+				
+		returnString = formatLaTex(str(returnString))
+			
+	except:
+		returnString = "Unable to find the solution of: " + formatLaTex(equation)
+	
+	return returnString
+
 
 def getVariables(equation):
 	variables = []
@@ -125,11 +256,18 @@ def getVariables(equation):
 	return variables
 
 def formatInput(equation):
+
+	"""index = equation.find("sin")
+	while index != -1:
+		equation = equation[0:index] + "sp.s" + equation[index+1:len(equation)]	
+		index = equation.find("sin", index+4)
+		print("in:",index)
+	"""
 	counter = len(equation)
 	i = 0
 	while counter > 0:
 		#print(equation[i], counter)
-		if equation[i].isdigit() and equation[i+1].isalpha():
+		if (equation[i].isdigit() and equation[i+1].isalpha()): #or (equation[i].isalpha() and equation[i+1].isalpha()):
 			equation = equation[0:i+1] + "*" + equation[i+1:len(equation)]
 			counter += 1
 		elif equation[i] == "^":
@@ -139,6 +277,20 @@ def formatInput(equation):
 			equation = equation[0:i] + "(" + equation[i+1:len(equation)]		
 		elif equation[i] == "}":
 			equation = equation[0:i] + ")" + equation[i+1:len(equation)]		
+		elif equation[i] == "π":
+			checked = False
+			if i != 0:
+				if equation[i-1].isalpha() or equation[i-1].isdigit():
+					equation = equation[0:i] + "*pi" + equation[i+1:len(equation)]		
+					checked = True
+					counter += 1
+			if not checked:
+				if equation[i+1].isalpha():
+					equation = equation[0:i] + "pi*" + equation[i+1:len(equation)]		
+					counter += 1	
+				else:
+					equation = equation[0:i] + "pi" + equation[i+1:len(equation)]		
+			counter += 1
 		
 		counter -= 1
 		i += 1
@@ -212,21 +364,6 @@ def isOperator(character):
 		pass"""
 
 def formatLaTex(equation):
-	"""counter = len(equation)
-	i = 0
-	while counter > 0:
-		if equation[i] == "*" and equation[i] == :
-			equation = equation[0:i+1] + "*" + equation[i+1:len(equation)]
-			counter += 1
-		
-		counter -= 1
-		i += 1
-		if i == len(equation)-1:
-			if equation[i] == "}":
-				equation = equation[0:i] + ")"
-			counter = 0
-	"""
-	
 	terms = parseTerms(equation)
 	#print("inside format latex")
 	for i in range(0,len(terms)):

@@ -321,13 +321,17 @@ function shiftContainers(position, direction){
 }
 
 
-function validateDerivativeVariable(){
+function validateDerivativeVariable(term){
 	var variable = document.getElementById('derivative-variable');
-	if(variable.value.length > 1){
+	if(!variable.value.substring(variable.value.length-1,variable.value.length).match(/[A-Za-z]/i)){
+		variable.value = variable.value.substring(0,variable.value.length-1);
+		variable.className = "error";
+		document.getElementById("derivative-error").innerHTML = "You may only enter a variable.";
+	}else if(variable.value.length > 1){
 		console.log("No");
 		variable.value = variable.value.substring(0,1);
 		variable.className = "error";
-		document.getElementById("derivative-error").innerHTML = "You may only choose one variable to take the derivative of.";
+		document.getElementById("derivative-error").innerHTML = "You may only choose one variable to take the " + term + " of.";
 	}else{
 		console.log("Good!");
 		document.getElementById("derivative-error").innerHTML = "";
