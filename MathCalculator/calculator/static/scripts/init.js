@@ -389,7 +389,7 @@ function updateRows(elem){
 		}
 	}else{
 		numCols = Number(elem.value);
-		console.log("in column function:" + numCols);
+		//console.log("in column function:" + numCols);
 		//console.log(matrixOne.children[0].);
 		deltaCols = matrixOne.children[0].children.length - numCols;
 		console.log("delta cols: " + deltaCols);
@@ -421,5 +421,49 @@ function updateRows(elem){
 }
 
 function updateBothMatrices(){
-	console.log("Test");
+	var matrixOne = document.getElementById("matrix-1").children[0];
+	var matrixTwo = document.getElementById("matrix-2").children[0];
+	var sign = document.getElementById("matrix-operation");
+	//console.log(sign.value);
+	var textarea = document.getElementById("id_textarea");
+
+	a = copyFieldsToMatrix(matrixOne);
+	b = copyFieldsToMatrix(matrixTwo);
+
+	//console.log("Outside a: " + a);
+	//console.log("Outside b: " + b);
+	textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +matrixOne.children[0].children.length + "|" + sign.value;
+	/*for(var i = 0; i < matrixOne.children.length; i++){
+		temp = [];
+		for(var j = 0; j < matrixOne.children[i].children.length; j++){
+			temp.append(matrixOne.children[i].children[j].innerHTML);
+		}
+		a.append(temp);
+	}*/
+
+}
+
+function copyFieldsToMatrix(matrix){
+	copyMatrix = [];
+	console.log(matrix);
+	for(var i = 0; i < matrix.children.length; i++){
+		temp = [];
+		for(var j = 0; j < matrix.children[i].children.length; j++){
+			//console.log(matrix.children[i].children[j]);
+			value = matrix.children[i].children[j].children[0].value;
+			if(value == ""){
+				temp.push(0);
+			}else{
+				temp.push(value);
+			}
+		}
+		//console.log("row: " + temp);
+		copyMatrix.push(temp);
+	}
+	/*console.log("Matrix: " + a);
+	console.log("Matrix [0,0]:" + a[0][0]);
+	console.log("Matrix [0,1]:" + a[0][1]);
+	console.log("Matrix [0,2]:" + a[0][2]);
+	console.log("Matrix [1,0]:" + a[1][0]);*/
+	return copyMatrix;
 }

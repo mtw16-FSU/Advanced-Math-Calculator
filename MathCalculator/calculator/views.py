@@ -273,7 +273,7 @@ def linear_algebra_matrix_ops_addition(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_addition(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "matrix-addition.html", {"form": form, "formattedEquation": formattedEquation})

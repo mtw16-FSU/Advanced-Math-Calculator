@@ -128,7 +128,7 @@ def formatInput(equation):
 	counter = len(equation)
 	i = 0
 	while counter > 0:
-		print(equation[i], counter)
+		#print(equation[i], counter)
 		if equation[i].isdigit() and equation[i+1].isalpha():
 			equation = equation[0:i+1] + "*" + equation[i+1:len(equation)]
 			counter += 1
@@ -212,6 +212,21 @@ def isOperator(character):
 		pass"""
 
 def formatLaTex(equation):
+	"""counter = len(equation)
+	i = 0
+	while counter > 0:
+		if equation[i] == "*" and equation[i] == :
+			equation = equation[0:i+1] + "*" + equation[i+1:len(equation)]
+			counter += 1
+		
+		counter -= 1
+		i += 1
+		if i == len(equation)-1:
+			if equation[i] == "}":
+				equation = equation[0:i] + ")"
+			counter = 0
+	"""
+	
 	terms = parseTerms(equation)
 	#print("inside format latex")
 	for i in range(0,len(terms)):
@@ -252,8 +267,12 @@ def formatLaTex(equation):
 					elif terms[i] == "(":
 						numRightParenthesis += 1
 				if i == oldPosition:
-					terms[i-1] = terms[i]
-					terms[i] = ""
+					#terms[i-1] = terms[i]
+					#terms[i] = ""
+					terms.insert(i+1,"}")
+					#terms = terms[0:i+1] + "}" + terms[i+1:len(terms)]
+					print("pow:",terms)
+					#i -= 1
 				else:
 					terms[i] = "}"
 					i = oldPosition
@@ -264,3 +283,84 @@ def formatLaTex(equation):
 	returnString = "".join(terms)	
 	print("Fixed:",returnString)
 	return "$" + returnString + "$"
+
+def matrix_addition(equation):
+	index = equation.find("|")
+	rowIndex = equation.find("|", index+1)
+	columnIndex = equation.find("|", rowIndex+1)
+	operationIndex = equation.find("|", columnIndex+1)
+
+	"""print("Index:",index)
+	print("Row Index:",rowIndex)
+	print("Column Index:",columnIndex)"""
+
+	matrixOneString = equation[0:index]
+	matrixTwoString = equation[index+1:rowIndex]
+	numRows = int(equation[rowIndex+1:columnIndex])
+	numCols = int(equation[columnIndex+1:operationIndex])
+	operation = equation[operationIndex+1:len(equation)]
+
+	matrixOne = convertStringToMatrix(matrixOneString, numRows, numCols)
+	matrixTwo = convertStringToMatrix(matrixTwoString, numRows, numCols)
+	
+	print("Matrix one:", matrixOneString)
+	print("Matrix two:", matrixTwoString)
+	print("Number of rows:", numRows)
+	print("Number of columns:", numCols)
+
+	print("Outside 1:", matrixOne)	
+	print("Outside 2:", matrixTwo)	
+	print("Operation:", operation)
+	
+	resultMatrix = []
+	if operation == "+":
+		for i in range(0,numRows):
+			temp = []
+			for j in range(0,numCols):
+				temp.append(int(matrixOne[i][j])+int(matrixTwo[i][j]))
+			resultMatrix.append(temp)
+	else:
+		for i in range(0,numRows):
+			temp = []
+			for j in range(0,numCols):
+				temp.append(int(matrixOne[i][j])-int(matrixTwo[i][j]))
+			resultMatrix.append(temp)
+	
+	print("Result:", resultMatrix)	
+
+	returnString = "$\\left[\\begin{matrix}"
+	for i in range(0,len(resultMatrix)):
+		for j in range(0,len(resultMatrix[i])):
+			if j == len(resultMatrix[i]) - 1:
+				returnString += str(resultMatrix[i][j])
+			else:	
+				returnString += str(resultMatrix[i][j]) + " &"
+		returnString += "\\"
+		returnString += "\\"
+	returnString += "\\end{matrix}\\right]$"
+	
+	print(returnString)
+
+	return returnString
+	"""for i in range(0,numRows):
+		for j in range(0,numCols):
+			pass
+	"""
+
+def convertStringToMatrix(field, numRows, numCols):
+	matrix = []
+	index = 0
+	for i in range(0,numRows):
+		temp = []
+		for j in range(0,numCols):
+			#temp.append(field[2*(j+(i*numCols))])
+			nextIndex = field.find(",",index)
+			if nextIndex == -1:
+				nextIndex = len(field)
+			temp.append(field[index:nextIndex])
+			index = nextIndex + 1
+		matrix.append(temp)
+		#print(temp)
+	#print("matrix:",matrix)	
+	return matrix
+	
