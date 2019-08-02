@@ -508,17 +508,55 @@ function copyFieldsToMatrix(matrix){
 				}
 			}
 		}
-		//console.log("row: " + temp);
 		copyMatrix.push(temp);
 	}
-	/*console.log("Matrix: " + a);
-	console.log("Matrix [0,0]:" + a[0][0]);
-	console.log("Matrix [0,1]:" + a[0][1]);
-	console.log("Matrix [0,2]:" + a[0][2]);
-	console.log("Matrix [1,0]:" + a[1][0]);*/
 	return copyMatrix;
 }
 
 function updateLimits(){
 	document.getElementById("id_text").innerHTML = document.getElementById("derivative-variable").value + "?" + document.getElementById("upper-limit").value + "?" + document.getElementById("lower-limit").value;
+}
+
+function updateNumSystems(elem){
+	if(isNaN(elem.value[elem.value.length-1])){
+		elem.value = elem.value.substring(0, elem.value.length-1);
+		return;
+	}
+	
+	if(Number(elem.value) > 5){
+		elem.value = 5;
+	}else if(Number(elem.value) < 1){
+		elem.value = 1;
+	}
+
+	var inputs = document.getElementsByClassName("system-textarea");
+	difference = Number(elem.value) - inputs.length;
+
+	if(difference < 0){ //some inputs need to be removed
+		while(difference < 0){
+			inputs[inputs.length-1].parentNode.removeChild(inputs[inputs.length-1]);
+			difference++;
+		}
+	}else if(difference > 0){ //some inputs need to be added
+		while(difference > 0){
+			newNode = document.createElement("textarea");
+			newNode.className = "system-textarea";
+			newNode.oninput = updateSystemOfEquations;
+			inputs[inputs.length-1].parentElement.insertBefore(newNode,inputs[inputs.length-1]);
+			difference--;
+		}
+	}
+}
+
+function updateSystemOfEquations(){
+	var inputs = document.getElementsByClassName("system-textarea");
+	
+	var textarea = document.getElementById("id_textarea");
+
+	textarea.innerHTML = "";
+	for(var i = 0; i < inputs.length; i++){
+		textarea.innerHTML += inputs[i].value + "|";
+	}
+
+	textarea.innerHTML = textarea.innerHTML.substring(0,textarea.innerHTML.length-1);
 }

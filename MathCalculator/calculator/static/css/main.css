@@ -22,6 +22,10 @@ body{
 	color:#006400;
 }
 
+.main p{
+	font-size:1.2em;
+}
+
 header{
 	display: block;
 	width:100%;
@@ -109,7 +113,7 @@ header h1 > span{
 	text-align:center;
 }
 
-#equation-input{
+#equation-input, .system-input{
 	border: 2px solid #00cc00;
 	border-radius:5px;
 	padding:10px;
@@ -122,13 +126,17 @@ header h1 > span{
 	position:relative;
 }
 
-#equation-input:hover{
+#equation-input:hover, .system-input:hover{
 	box-shadow: 0 0 8px #00cc00;
 }
 
-#equation-input:focus{
+#equation-input:focus, .system-input:hover{
 	border: 2px solid #006600;
 	box-shadow: 0 0 8px #006600;
+}
+
+.system-input{
+	margin-top: 20px;
 }
 
 .main h2{
@@ -261,6 +269,7 @@ cursor:pointer;
 	border-top: 2px solid darkgreen;
 }
 
+/*#textarea, .system-textarea{*/
 #textarea{
 	position: absolute;
     width: 100%;
@@ -268,6 +277,22 @@ cursor:pointer;
     height: 100%;
 	top: 0;
 	opacity:0;
+}
+
+.system-textarea{
+	resize: none;
+    padding: 15px 5px 0 5px;
+    border: 2px solid darkgreen;
+    border-radius: 5px;
+    color: #006400;
+    font-size: 1em;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    width: 40%;
+    text-align: center;
+    font-size: 1.2em;
+    font-family: "Roboto Slab", serif;
 }
 
 #cursor{
@@ -386,4 +411,8 @@ tbody{
 .left{
 	float:left;
 	width:50%;
+}
+
+.system-input{
+
 }

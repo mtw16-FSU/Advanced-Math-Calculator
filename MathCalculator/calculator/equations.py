@@ -597,4 +597,65 @@ def convertStringToMatrix(field, numRows, numCols):
 		#print(temp)
 	#print("matrix:",matrix)	
 	return matrix
+
+#NOTE: everything here is completely untested
+def solveSystemOfEquations(equation):
+	#seperates the equations into a list
+	equations = equation.split("|")
+
+	print(equations)
 	
+	variables = getVariables(equation)
+	print("variables:",variables)
+	for i in range(0, len(variables)):
+		sp.var(variables[i])
+		variables[i] = sp.sympify(variables[i])	
+	
+	for i in range(0, len(equations)):
+		equations[i] = formatInput(equations[i])
+		for j in range(0,len(equations[i])):
+			if equations[i][j] == "=" or equations[i][j] == "≤" or equations[i][j] == "≥":
+				equations[i] = equations[i][0:j] + "-(" + equations[i][j+1:len(equations[i])] + ")"
+				j = len(equations[i])
+		print(equations[i])
+		equations[i] = sp.sympify(equations[i])
+		print(equations[i])
+
+
+	returnString = ""
+	try:
+		print(equations)
+		print(variables)
+		result = sp.linsolve(equations, variables)
+		print(result)
+		if type(result).__name__ == "EmptySet":
+			returnString = "No solution"
+		else:
+			result = list(list(result)[0])
+			for i in range(0, len(variables)):
+				print(variables[i])
+				print(str(result[i]))
+				returnString += str(variables[i]) + " = " + str(result[i]) + ", "
+			returnString = returnString[0:len(returnString)-2]
+		
+	except:
+		returnString = "Error, unable to evaluate system of equations"
+
+	return returnString
+	
+	# Need to do:
+	# 1. switch anything on the right side of an equals sign over to the left by subtraction
+	# 2. convert equations into their formatted format i.e. 2y => 2*y
+	# 3. run equations[i] = equations[i].sympify(equations[i])
+	# 4. generate list of variables used (run getVariables and then sp.var(v))
+	# 5. run sp.linsolve(equations, variableArray)
+	# 		-detect if EmptySet() is returned (no solutions)
+	# 		-detect if result contains a variable(letter), and add that variable to a unique list (getVariables?), then outout that variable as being a free variable
+	# 6. except: print("Error, unable to solve the system of equations")
+	#sp.solve_linear_system_LU(matrix, [var1, var2, ...])
+
+
+
+	# Graphing:
+	#  sp.plot(equation,variable)
+

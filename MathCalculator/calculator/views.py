@@ -31,7 +31,7 @@ def algebra_equations_system(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			pass
+			formattedEquation = solveSystemOfEquations(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "system.html", {"form": form, "formattedEquation": formattedEquation})
