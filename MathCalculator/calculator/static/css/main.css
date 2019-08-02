@@ -22,12 +22,36 @@ body{
 	color:#006400;
 }
 
+header{
+	display: block;
+	width:100%;
+	text-align: center;
+	padding: 30px 0 70px 0;
+}
+
+header > h1{
+	font-family: 'Concert One', cursive;
+	font-size:3em;
+	text-align:center;
+	padding:30px 0;
+	display:inline;
+}
+
+header h1 > span{
+	background-color: darkgreen;
+	color: white;
+	padding: 0 25px;
+	border-radius: 60px;
+}
+
+/* Not Needed, Remove Later */
 .main > h1{
 	font-family: 'Concert One', cursive;
 	font-size:3em;
 	text-align:center;
 	padding:30px 0 70px 0;
 }
+/* ----------------------- */
 
 .side-menu{
 	background-color:#006600;
@@ -286,7 +310,8 @@ cursor:pointer;
 	font-size:1em;
 }
 
-#num-rows, #num-cols, #upper-limit, #lower-limit{
+#num-rows, #num-cols, #upper-limit, #lower-limit, 
+#num-rows-1, #num-cols-1, #num-rows-2, #num-cols-2{
 	width:40px;
 	overflow:hidden;
 	color:#006400;
@@ -316,11 +341,11 @@ cursor:pointer;
 }
 
 .row{
-
+	display:block;
 }
 
 tbody{
-	display:block;
+	display: inline;
 	margin: auto;
 	text-align: -webkit-center;
 }
@@ -356,4 +381,9 @@ tbody{
 
 .integral{
 	font-size:1.6em;
+}
+
+.left{
+	float:left;
+	width:50%;
 }

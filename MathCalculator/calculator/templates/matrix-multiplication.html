@@ -13,17 +13,85 @@
 	<script type="text/javascript" src="{% static 'scripts/init.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/latex.js' %}"></script>
 </head>
-<body onload="init(); initAlt('matrix-ops-menu'); document.getElementById('linear-algebra-menu').nextElementSibling.style.display = 'block'; document.getElementById('matrix-ops-menu').style.color = '#ffffff'; document.getElementById('matrix-multiplication-menu').style.color = '#fff000'; " id="body">
+<body onload="initAlt('matrix-ops-menu'); document.getElementById('linear-algebra-menu').nextElementSibling.style.display = 'block'; document.getElementById('matrix-ops-menu').style.color = '#ffffff'; document.getElementById('matrix-multiplication-menu').style.color = '#fff000'; " id="body">
 	<div class="main">
-		<h1>Advanced Math Calculator</h1>
+		{% include "header.html" %}
 		{% include "menu.html" %}
 		<div class="main-section">
 			<h2>Matrix Multiplication</h2>
-			{% include "symbol-bar-equations-solve.html" %}
 			<form class="equation-form" method="post">{% csrf_token %}
 				{{ form.as_p }}
-				<div id="equation-input">
-					<textarea tabindex="-1" id="textarea"></textarea><div id="cursor" class="1">|</div></div>
+
+				<div class="container">
+					<div class="left">
+						<h2>Matrix 1</h2>
+						<div class="container">
+							<span>Enter the number of rows (max 5):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+							<textarea class="container-field" id="num-rows-1" oninput="updateRows(this)"></textarea>
+							<span id="row-error"></span>
+						</div>
+						<div class="container">
+							<span>Enter the number of columns (max 5):&nbsp; </span>
+							<textarea class="container-field" id="num-cols-1" oninput="updateRows(this)"></textarea>
+							<span id="col-error"></span>
+						</div>
+					</div>
+					<div class="left">
+						<h2>Matrix 2</h2>
+							<div class="container">
+								<span>Enter the number of rows (max 5):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+								<textarea class="container-field" id="num-rows-2" oninput="updateRows(this)"></textarea>
+								<span id="row-error"></span>
+							</div>
+							<div class="container">
+								<span>Enter the number of columns (max 5):&nbsp; </span>
+								<textarea class="container-field" id="num-cols-2" oninput="updateRows(this)"></textarea>
+								<span id="col-error"></span>
+							</div>
+						</div>
+				</div>
+				<br style="clear:both;"/>
+				
+				<div class="matrices-container" oninput="updateBothMatrices('multiplication')">
+				<table class="matrix" id="matrix-1">
+					<tr class="row">
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+					</tr>
+					<tr class="row">
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+					</tr>
+					<tr class="row">
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+						<td class="column"><textarea></textarea></td>
+					</tr>
+				</table>
+				<div id="matrix-operation" style="background-color: unset; border:none;">
+					*
+				</div>				
+				<table class="matrix" id="matrix-2">
+						<tr class="row" id="row-2-1">
+							<td class="column"><textarea id="col-2-1-1"></textarea></td>
+							<td class="column"><textarea id="col-2-1-2"></textarea></td>
+							<td class="column"><textarea id="col-2-1-3"></textarea></td>
+						</tr>
+						<tr class="row" id="row-2-2">
+							<td class="column"><textarea id="col-2-2-1"></textarea></td>
+							<td class="column"><textarea id="col-2-2-2"></textarea></td>
+							<td class="column"><textarea id="col-2-2-3"></textarea></td>
+						</tr>
+						<tr class="row" id="row-2-3">
+							<td class="column"><textarea id="col-2-3-1"></textarea></td>
+							<td class="column"><textarea id="col-2-3-2"></textarea></td>
+							<td class="column"><textarea id="col-2-3-3"></textarea></td>
+						</tr>
+					</table>
+				</div>
+				<br style="clear:both;"/>
 				<input class="equation-submit-button" type="submit" value="Submit">
             </form>
             <div id="equation-display">{{ formattedEquation }}</div>

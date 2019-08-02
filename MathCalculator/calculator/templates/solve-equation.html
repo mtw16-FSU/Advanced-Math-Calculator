@@ -15,10 +15,9 @@
 </head>
 <body onload="init(); initAlt('equations-menu'); document.getElementById('algebra-menu').nextElementSibling.style.display = 'block'; document.getElementById('equations-menu').style.color = '#ffffff'; document.getElementById('equations-solve-menu').style.color = '#fff000'; " id="body">
 	<div class="main">
-		<h1>Advanced Math Calculator</h1>
+		{% include "header.html" %}
 		{% include "menu.html" %}
 		<div class="main-section">
-			<h2>Solve Equation/Inequality</h2>
 			{% include "symbol-bar-equations-solve.html" %}
 			<form class="equation-form" method="post">{% csrf_token %}
 				{{ form.as_p }}

@@ -363,50 +363,76 @@ function updateRows(elem){
 		elem.value = 1;
 	}
 	
-	if(elem.id == "num-rows"){
+	//NEED TO CHANGE HERE FOR HAVING MATRICES OF 2 DIFFERENT SIZES
+	//need to do adding rows and whole column section
+
+	if(elem.id == "num-rows" || elem.id == "num-rows-1" || elem.id == "num-rows-2"){
 		numRows = Number(elem.value);
-		deltaRows = matrixOne.children.length - numRows;
+
+		if(elem.id == "num-rows" || elem.id == "num-rows-1"){
+			deltaRows = matrixOne.children.length - numRows;
+		}else{
+			deltaRows = matrixTwo.children.length - numRows;
+		}
 		if(deltaRows > 0){
 			while(deltaRows > 0){
 				//console.log(matrixOne.children[matrixOne.children.length-1]);
 				//console.log(matrixOne.children);
-				matrixOne.removeChild(matrixOne.children[matrixOne.children.length-1]);
-				matrixTwo.removeChild(matrixTwo.children[matrixTwo.children.length-1]);
+				if(elem.id == "num-rows" || elem.id == "num-rows-1"){
+					matrixOne.removeChild(matrixOne.children[matrixOne.children.length-1]);
+					matrixOne = document.getElementById("matrix-1").children[0];
+				}
 
-				matrixOne = document.getElementById("matrix-1").children[0];
-				matrixTwo = document.getElementById("matrix-2").children[0];
+				if(elem.id == "num-rows" || elem.id == "num-rows-2"){
+					matrixTwo.removeChild(matrixTwo.children[matrixTwo.children.length-1]);
+					matrixTwo = document.getElementById("matrix-2").children[0];
+				}
+
 				//console.log(deltaRows);
 				deltaRows--;
 			}
 		}else if(deltaRows < 0){
-			insideText = ""
-			for(var i = 0; i < matrixOne.children[0].children.length; i++){
+			insideText = "";
+			matrixLength = (elem.id == "num-rows-2") ? matrixTwo.children[0].children.length : matrixOne.children[0].children.length;
+			for(var i = 0; i < matrixLength; i++){
 				insideText += "<td class='column'><textarea></textarea></td>";
 			}
 			while(deltaRows < 0){
-				newNode = document.createElement("tr");
-				newNode.className = "row";
-				newNode.innerHTML = insideText;
-				matrixOne.appendChild(newNode);
-				newNode = document.createElement("tr");
-				newNode.className = "row";
-				newNode.innerHTML = insideText;
-				matrixTwo.appendChild(newNode);
+
+				if(elem.id == "num-rows" || elem.id == "num-rows-1"){
+					newNode = document.createElement("tr");
+					newNode.className = "row";
+					newNode.innerHTML = insideText;
+					matrixOne.appendChild(newNode);
+				}
+
+
+				if(elem.id == "num-rows" || elem.id == "num-rows-2"){
+					newNode = document.createElement("tr");
+					newNode.className = "row";
+					newNode.innerHTML = insideText;
+					matrixTwo.appendChild(newNode);
+				}
 				deltaRows++;
 			}
 		}
 	}else{
 		numCols = Number(elem.value);
-		//console.log("in column function:" + numCols);
-		//console.log(matrixOne.children[0].);
-		deltaCols = matrixOne.children[0].children.length - numCols;
+		deltaCols = (elem.id == "num-cols-2") ? matrixTwo.children[0].children.length - numCols : matrixOne.children[0].children.length - numCols;
 		console.log("delta cols: " + deltaCols);
+		matrixLength = (elem.id == "num-cols-2") ? matrixTwo.children.length : matrixOne.children.length;
 		if(deltaCols > 0){
-			for(var i = 0; i < matrixOne.children.length; i++){
+			for(var i = 0; i < matrixLength; i++){
 				temp = deltaCols;
 				while(temp > 0){
-					matrixOne.children[i].removeChild(matrixOne.children[i].children[matrixOne.children[i].children.length-1]);
-					matrixTwo.children[i].removeChild(matrixTwo.children[i].children[matrixTwo.children[i].children.length-1]);
+
+					if(elem.id == "num-cols" || elem.id == "num-cols-1"){
+						matrixOne.children[i].removeChild(matrixOne.children[i].children[matrixOne.children[i].children.length-1]);
+					}
+
+					if(elem.id == "num-cols" || elem.id == "num-cols-2"){
+						matrixTwo.children[i].removeChild(matrixTwo.children[i].children[matrixTwo.children[i].children.length-1]);
+					}
 					temp--;
 				}
 			}
@@ -418,17 +444,22 @@ function updateRows(elem){
 				deltaCols++;
 			}
 			console.log(insideText);
-			for(var i = 0; i < matrixOne.children.length; i++){
-				//console.log("Before: " + matrixOne.children[i].innerHTML);
-				matrixOne.children[i].innerHTML += insideText;
-				matrixTwo.children[i].innerHTML += insideText;
+			for(var i = 0; i < matrixLength; i++){
+
+				if(elem.id == "num-cols" || elem.id == "num-cols-1"){
+					matrixOne.children[i].innerHTML += insideText;
+				}
+
+				if(elem.id == "num-cols" || elem.id == "num-cols-2"){
+					matrixTwo.children[i].innerHTML += insideText;
+				}
 				//console.log("After: " + matrixOne.children[i].innerHTML);
 			}
 		}
 	}
 }
 
-function updateBothMatrices(){
+function updateBothMatrices(operation){
 	var matrixOne = document.getElementById("matrix-1").children[0];
 	var matrixTwo = document.getElementById("matrix-2").children[0];
 	var sign = document.getElementById("matrix-operation");
@@ -440,20 +471,21 @@ function updateBothMatrices(){
 
 	//console.log("Outside a: " + a);
 	//console.log("Outside b: " + b);
-	textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +matrixOne.children[0].children.length + "|" + sign.value;
-	/*for(var i = 0; i < matrixOne.children.length; i++){
-		temp = [];
-		for(var j = 0; j < matrixOne.children[i].children.length; j++){
-			temp.append(matrixOne.children[i].children[j].innerHTML);
-		}
-		a.append(temp);
-	}*/
+
+	if(operation == "addition"){
+		textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +
+			matrixOne.children[0].children.length + "|" + sign.value;
+	}else{
+		textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +
+			matrixOne.children[0].children.length + "|" + matrixTwo.children.length + "|" + matrixTwo.children[0].children.length;
+	}
+	
 
 }
 
 function copyFieldsToMatrix(matrix){
 	copyMatrix = [];
-	console.log(matrix);
+	console.log("matrix: " + matrix);
 	for(var i = 0; i < matrix.children.length; i++){
 		temp = [];
 		for(var j = 0; j < matrix.children[i].children.length; j++){
@@ -462,7 +494,18 @@ function copyFieldsToMatrix(matrix){
 			if(value == ""){
 				temp.push(0);
 			}else{
-				temp.push(value);
+				valid = true;
+				for(var k = 0; k < value.length; k++){
+					if(isNaN(value[k]) && value[k] != "/" && value[k] != "."){
+						console.log("Not valid");
+						valid = false;
+					}
+				}
+				if(valid){
+					temp.push(value);
+				}else{
+					temp.push(0);
+				}
 			}
 		}
 		//console.log("row: " + temp);

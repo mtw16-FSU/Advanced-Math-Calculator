@@ -15,7 +15,7 @@
 </head>
 <body onload="init(); initAlt('graphical-menu'); document.getElementById('calculus-menu').nextElementSibling.style.display = 'block'; document.getElementById('graphical-menu').style.color = '#ffffff'; document.getElementById('arc-length-menu').style.color = '#fff000'; " id="body">
 	<div class="main">
-		<h1>Advanced Math Calculator</h1>
+		{% include "header.html" %}
 		{% include "menu.html" %}
 		<div class="main-section">
 			<h2>Arc Length</h2>

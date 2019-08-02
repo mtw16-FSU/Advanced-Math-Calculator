@@ -4,11 +4,6 @@ import sympy as sp
 
 def testEquationCalculator(equation):
 	print("#",equation,"#")
-	#x = np.float32(1.0)
-	#print(x)
-	#print(compiler.parse(""))
-	#print(eval(equation))
-	#print(eval("52-21"))
 
 	#temporary fix to get powers of numbers working
 	originalEquation = equation	
@@ -466,6 +461,61 @@ def formatLaTex(equation):
 	print("Fixed:",returnString)
 	return "$" + returnString + "$"
 
+def matrix_multiplication(equation):
+	index = equation.find("|")
+	rowOneIndex = equation.find("|", index+1)
+	columnOneIndex = equation.find("|", rowOneIndex+1)
+	rowTwoIndex = equation.find("|", columnOneIndex+1)
+	columnTwoIndex = equation.find("|", rowTwoIndex+1)
+
+	print("Equation:",equation)
+	print("Index:",index)
+	print("Row One Index:",rowOneIndex)
+	print("Column One Index:",columnOneIndex)
+	print("Row Two Index:",rowTwoIndex)
+	print("Column Two Index:",columnTwoIndex)
+	
+	matrixOneString = equation[0:index]
+	matrixTwoString = equation[index+1:rowOneIndex]
+	numOneRows = int(equation[rowOneIndex+1:columnOneIndex])
+	numOneCols = int(equation[columnOneIndex+1:rowTwoIndex])
+	numTwoRows = int(equation[rowTwoIndex+1:columnTwoIndex])
+	numTwoCols = int(equation[columnTwoIndex+1:len(equation)])
+
+	if numOneCols != numTwoRows:
+		return "Error, the number of columns in matrix 1 must equal the number of rows in matrx 2"
+
+	matrixOne = convertStringToMatrix(matrixOneString, numOneRows, numOneCols)
+	matrixTwo = convertStringToMatrix(matrixTwoString, numTwoRows, numTwoCols)
+
+	#if()
+	
+	matrixOne = sp.Matrix(matrixOne)
+	matrixTwo = sp.Matrix(matrixTwo)
+	
+	resultMatrix = matrixOne*matrixTwo
+
+	resultMatrix = resultMatrix.tolist()
+	
+	print("Result:", resultMatrix)	
+
+#-------------------NEED TO FORMAT AND DOUBLE CHECK RESULT OF MULTIPLICATION
+
+	returnString = "$\\left[\\begin{matrix}"
+	for i in range(0,len(resultMatrix)):
+		for j in range(0,len(resultMatrix[i])):
+			if j == len(resultMatrix[i]) - 1:
+				returnString += str(resultMatrix[i][j])
+			else:	
+				returnString += str(resultMatrix[i][j]) + " &"
+		returnString += "\\"
+		returnString += "\\"
+	returnString += "\\end{matrix}\\right]$"
+	
+	print(returnString)
+
+	return returnString
+
 def matrix_addition(equation):
 	index = equation.find("|")
 	rowIndex = equation.find("|", index+1)
@@ -499,13 +549,15 @@ def matrix_addition(equation):
 		for i in range(0,numRows):
 			temp = []
 			for j in range(0,numCols):
-				temp.append(int(matrixOne[i][j])+int(matrixTwo[i][j]))
+				#temp.append(int(matrixOne[i][j])+int(matrixTwo[i][j]))
+				temp.append(eval(matrixOne[i][j]+"+"+matrixTwo[i][j]))
 			resultMatrix.append(temp)
 	else:
 		for i in range(0,numRows):
 			temp = []
 			for j in range(0,numCols):
-				temp.append(int(matrixOne[i][j])-int(matrixTwo[i][j]))
+				#temp.append(int(matrixOne[i][j])-int(matrixTwo[i][j]))
+				temp.append(eval(matrixOne[i][j]+ "-" + matrixTwo[i][j]))
 			resultMatrix.append(temp)
 	
 	print("Result:", resultMatrix)	

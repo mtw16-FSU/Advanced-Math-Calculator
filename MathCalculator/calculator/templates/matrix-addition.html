@@ -15,7 +15,7 @@
 </head>
 <body onload="initAlt('matrix-ops-menu'); document.getElementById('linear-algebra-menu').nextElementSibling.style.display = 'block'; document.getElementById('matrix-ops-menu').style.color = '#ffffff'; document.getElementById('matrix-addition-menu').style.color = '#fff000'; " id="body">
 	<div class="main">
-		<h1>Advanced Math Calculator</h1>
+		{% include "header.html" %}
 		{% include "menu.html" %}
 		<div class="main-section">
 			<h2>Matrix Addition/Subtraction</h2>
@@ -31,7 +31,7 @@
 						<span id="col-error"></span>
 					</div>
 				
-				<div class="matrices-container" oninput="updateBothMatrices()">
+				<div class="matrices-container" oninput="updateBothMatrices('addition')">
 				<table class="matrix" id="matrix-1">
 					<tr class="row">
 						<td class="column"><textarea></textarea></td>
