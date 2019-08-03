@@ -312,7 +312,7 @@ def linear_algebra_info_RREF(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_RREF(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "matrix-RREF.html", {"form": form, "formattedEquation": formattedEquation})
@@ -322,7 +322,7 @@ def linear_algebra_info_determinant(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_determinant(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "matrix-determinant.html", {"form": form, "formattedEquation": formattedEquation})
@@ -332,7 +332,7 @@ def linear_algebra_info_transpose(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_transpose(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "matrix-transpose.html", {"form": form, "formattedEquation": formattedEquation})
@@ -342,20 +342,20 @@ def linear_algebra_info_inverse(request):
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_inverse(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
 	return render(request, "matrix-inverse.html", {"form": form, "formattedEquation": formattedEquation})
     
-def linear_algebra_info_LI(request):
+def linear_algebra_info_eigenvalues(request):
 	formattedEquation = ""
 	if request.method == "POST":
 		form = MathForm(request.POST)
 		if form.is_valid():
-			formattedEquation = testEquationCalculator(form.cleaned_data["textarea"])
+			formattedEquation = matrix_eigenvalues(form.cleaned_data["textarea"])
 	else:
 		form = MathForm()
-	return render(request, "matrix-LI.html", {"form": form, "formattedEquation": formattedEquation})
+	return render(request, "matrix-eigenvalues.html", {"form": form, "formattedEquation": formattedEquation})
     
 def geometry(request):
 	return render(request, "geometry.html")

@@ -19,7 +19,7 @@
 		{% include "menu.html" %}
 		<div class="main-section">
 			<h2>Solve Arithmetic Expression</h2>
-			{% include "symbol-bar-systems.html" %}
+			{% include "symbol-bar-expressions.html" %}
 			<form class="equation-form" method="post">{% csrf_token %}
 				{{ form.as_p }}
 				<div id="equation-input">

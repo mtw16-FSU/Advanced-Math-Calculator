@@ -94,6 +94,9 @@ header h1 > span{
 	width:75%;
 }
 
+.main-section h2{
+	font-size:2em;
+}
 
 .main-section p{
 	padding:15px 50px;

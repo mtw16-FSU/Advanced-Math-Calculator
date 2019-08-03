@@ -642,20 +642,143 @@ def solveSystemOfEquations(equation):
 		returnString = "Error, unable to evaluate system of equations"
 
 	return returnString
+
+
+def matrix_RREF(equation):
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	print(matrix)
+	matrix = sp.Matrix(matrix)
+	print("After:",matrix)
+
+	returnString = ""
+	try:
+		matrix = matrix.rref()
+		print(matrix)
+		resultMatrix = list(matrix)[0].tolist()
+		print("List:",matrix)
+		returnString = "$\\left[\\begin{matrix}"
+		for i in range(0,len(resultMatrix)):
+			for j in range(0,len(resultMatrix[i])):
+				if j == len(resultMatrix[i]) - 1:
+					returnString += str(resultMatrix[i][j])
+				else:	
+					returnString += str(resultMatrix[i][j]) + " &"
+			returnString += "\\"
+			returnString += "\\"
+		returnString += "\\end{matrix}\\right]$"
+	except:
+		returnString = "Error, unable to put in RREF form"
+
+
+	return returnString
+
+def matrix_determinant(equation):
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	print(matrix)
+	matrix = sp.Matrix(matrix)
+	print("After:",matrix)
+
+	returnString = ""
+	try:
+		returnString = matrix.det()
+	except:
+		returnString = "Error, unable to put in RREF form"
+
+	return returnString
+
+
+def matrix_transpose(equation):
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
 	
-	# Need to do:
-	# 1. switch anything on the right side of an equals sign over to the left by subtraction
-	# 2. convert equations into their formatted format i.e. 2y => 2*y
-	# 3. run equations[i] = equations[i].sympify(equations[i])
-	# 4. generate list of variables used (run getVariables and then sp.var(v))
-	# 5. run sp.linsolve(equations, variableArray)
-	# 		-detect if EmptySet() is returned (no solutions)
-	# 		-detect if result contains a variable(letter), and add that variable to a unique list (getVariables?), then outout that variable as being a free variable
-	# 6. except: print("Error, unable to solve the system of equations")
-	#sp.solve_linear_system_LU(matrix, [var1, var2, ...])
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	matrix = sp.Matrix(matrix)
+
+	returnString = ""
+	try:
+		matrix = matrix.T
+		print("Transpose:",matrix)
+		resultMatrix = matrix.tolist()
+		returnString = "$\\left[\\begin{matrix}"
+		for i in range(0,len(resultMatrix)):
+			for j in range(0,len(resultMatrix[i])):
+				if j == len(resultMatrix[i]) - 1:
+					returnString += str(resultMatrix[i][j])
+				else:	
+					returnString += str(resultMatrix[i][j]) + " &"
+			returnString += "\\"
+			returnString += "\\"
+		returnString += "\\end{matrix}\\right]$"
+	except:
+		returnString = "Error, unable to transpose"
 
 
+	return returnString
 
-	# Graphing:
-	#  sp.plot(equation,variable)
 
+def matrix_inverse(equation):
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	print(matrix)
+	matrix = sp.Matrix(matrix)
+	print("After:",matrix)
+
+	returnString = ""
+	try:
+		matrix = matrix**-1
+		print(matrix)
+		resultMatrix = matrix.tolist()
+		print("List:",matrix)
+		returnString = "$\\left[\\begin{matrix}"
+		for i in range(0,len(resultMatrix)):
+			for j in range(0,len(resultMatrix[i])):
+				if j == len(resultMatrix[i]) - 1:
+					returnString += str(resultMatrix[i][j])
+				else:	
+					returnString += str(resultMatrix[i][j]) + " &"
+			returnString += "\\"
+			returnString += "\\"
+		returnString += "\\end{matrix}\\right]$"
+	except:
+		returnString = "Error, matrix is not invertible"
+
+
+	return returnString
+
+
+def matrix_eigenvalues(equation):
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	print(matrix)
+	matrix = sp.Matrix(matrix)
+	print("After:",matrix)
+
+	returnString = ""
+	try:
+		result = matrix.eigenvals()
+		returnString = "$\lambda = "
+		#key is th eigenvalue, value is multiplicity
+		for value in result:
+			returnString += str(value) + ", "
+		returnString = returnString[0:len(returnString)-2] + "$"
+	except:
+		returnString = "Error, unable to find eigenvalues"
+
+
+	return returnString

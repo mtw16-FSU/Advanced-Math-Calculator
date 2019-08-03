@@ -349,7 +349,9 @@ function updateRows(elem){
 	//console.log(elem);
 	//console.log(elem.value[elem.value.length-1]);
 	var matrixOne = document.getElementById("matrix-1").children[0];
-	var matrixTwo = document.getElementById("matrix-2").children[0];
+	if(elem.id != "num-rows-1" && elem.id != "num-cols-1"){
+		var matrixTwo = document.getElementById("matrix-2").children[0];
+	}
 	console.log("rows before: " + matrixOne.children.length);
 	if(isNaN(elem.value[elem.value.length-1])){
 		elem.value = elem.value.substring(0, elem.value.length-1);
@@ -460,24 +462,28 @@ function updateRows(elem){
 }
 
 function updateBothMatrices(operation){
+
 	var matrixOne = document.getElementById("matrix-1").children[0];
-	var matrixTwo = document.getElementById("matrix-2").children[0];
-	var sign = document.getElementById("matrix-operation");
-	//console.log(sign.value);
+	a = copyFieldsToMatrix(matrixOne);
+
+	if(operation == "addition" || operation == "multiplication"){
+		var matrixTwo = document.getElementById("matrix-2").children[0];
+		b = copyFieldsToMatrix(matrixTwo);
+	}
+
 	var textarea = document.getElementById("id_textarea");
 
-	a = copyFieldsToMatrix(matrixOne);
-	b = copyFieldsToMatrix(matrixTwo);
-
-	//console.log("Outside a: " + a);
-	//console.log("Outside b: " + b);
 
 	if(operation == "addition"){
+		var sign = document.getElementById("matrix-operation");
 		textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +
-			matrixOne.children[0].children.length + "|" + sign.value;
+		matrixOne.children[0].children.length + "|" + sign.value;
+	}else if(operation == "multiplication"){
+		textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +
+		matrixOne.children[0].children.length + "|" + matrixTwo.children.length + "|" + matrixTwo.children[0].children.length;
 	}else{
-		textarea.innerHTML = a + "|" + b + "|" + matrixOne.children.length + "|" +
-			matrixOne.children[0].children.length + "|" + matrixTwo.children.length + "|" + matrixTwo.children[0].children.length;
+		textarea.innerHTML = a + "|" + matrixOne.children.length + "|" +
+		matrixOne.children[0].children.length;
 	}
 	
 
@@ -496,7 +502,8 @@ function copyFieldsToMatrix(matrix){
 			}else{
 				valid = true;
 				for(var k = 0; k < value.length; k++){
-					if(isNaN(value[k]) && value[k] != "/" && value[k] != "."){
+					if(isNaN(value[k]) && value[k] != "/" && value[k] != "." &&
+						 value[k] != "-" && value[k] != "*" && value[k] != "(" && value[k] != ")"){
 						console.log("Not valid");
 						valid = false;
 					}
