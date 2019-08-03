@@ -8,8 +8,6 @@ function printLatex(){
 }
 
 function insertSymbol(symbolID){
-	//cursorCurrentParent
-	//var input = document.getElementById("equation-input");
 	var input = document.getElementById(cursorCurrentParent);
 	var symbol = document.getElementById(symbolID);
 
@@ -24,8 +22,6 @@ function insertSymbol(symbolID){
 		newNode.className = "input-item";
 		newNode.innerHTML = symbol.innerHTML;
 	}
-	//newNode.appendChild(newContent);
-
 	insertAtCursor(newNode, symbol.innerHTML);
 
 	var textarea = document.getElementById("id_textarea");
@@ -34,8 +30,6 @@ function insertSymbol(symbolID){
 
 
 function insertAtCursor(newNode, character){
-//cursorCurrentParent
-	//var input = document.getElementById("equation-input");
 	var input = document.getElementById(cursorCurrentParent);
 	var cursor = document.getElementById("cursor");
 
@@ -44,36 +38,27 @@ function insertAtCursor(newNode, character){
 		for(var i = 1; i < inputItems.length-1; i++){
 			if(inputItems[i].id == "cursor"){
 				input.insertBefore(newNode, inputItems[i+1]);
-				//necessary to update which element is the cursor element
+
+				//have to update which element is the cursor element
 				cursor = document.getElementById("cursor");
 				cursor.className = i+1;
-				//console.log("Before");
+				
 				moveCursor(i+1);
-				//console.log("In here: " + textarea.innerHTML);
-				//console.log("After");
-//console.log("i+1 = " + inputItems[i+2].id);
 				shiftContainers(i+1, 1);
-				/*if(inputItems[i+2].className == "sup"){
-					inputItems[i+2].id = "sup-" + (i + 1);
-					console.log("HEAYH: " + inputItems[i+2].id);
-				}*/
+				
 
 				found = true;
 				i = inputItems.length;
-				//console.log("i: " + i + " out of " + inputItems.length);
 			}
 		}
 		if(!found){
-			//console.log("Not found");
 			input.appendChild(newNode);
-			//console.log("Not found: " + inputItems.length);
 			cursor = document.getElementById("cursor");
 			cursor.className = inputItems.length-1;
 			moveCursor(inputItems.length-1);
 		}
 
 		if(document.getElementById(cursorCurrentParent).parentElement.className == "fraction" && document.getElementById(cursorCurrentParent).children.length > 2){
-			//console.log("INSERT IN NUM OR DENOM");
 			document.getElementById(cursorCurrentParent).className = (document.getElementById(cursorCurrentParent).className.substring(0,9) == "numerator") ? "numerator" : "denominator";
 		}
 
@@ -122,6 +107,4 @@ function interpretEquation(){
 
 	var textarea = document.getElementById("id_textarea");
 	textarea.innerHTML = temp;
-
-	//console.log(temp);
 }

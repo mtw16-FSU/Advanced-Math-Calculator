@@ -3,11 +3,12 @@
 import sympy as sp
 
 def testEquationCalculator(equation):
-	print("#",equation,"#")
 
-	#temporary fix to get powers of numbers working
+	#saves unaltered form of equation
 	originalEquation = equation	
 
+	#iterates through and replaces special characters with their
+	#mathematical equivalents for performing the necessary computation
 	counter = len(equation)
 	i = 0
 	while counter > 0:
@@ -21,75 +22,73 @@ def testEquationCalculator(equation):
 
 		counter -= 1
 		i += 1
-
-	print(equation)	
+	
+	#attempts to evaluate the expression and throws an 
+	#error message if eval() is unable to compute it
 	returnString = ""
 	try:
-		#computedExpression = str(eval(equation))
 		returnString = "$" + originalEquation + " = " + str(eval(equation)) + "$"
 	except:
-		print("Error")
 		returnString = "Error, unable to process the following  equation: $" + originalEquation + "$"
 	
 	return returnString
 
 def solveForVariable(equation):
-	print("Untouched equation:",equation)
+	#converts equation to the format required by sympy
 	formattedEquation = formatInput(equation)
-	print("Formatted equation:",formattedEquation)
-	
+
+	#extracts the individual mathematical terms in the equation	
 	terms = parseTerms(formattedEquation)
-	print("Terms:",terms)
-	#formattedEquation = formatSolveInput(formattedEquation)
 
 	equalityOperator = "="
-	
+
+	#determines if there is an equals sign in the entered
+	#equation and adjusts format for sympy solver	
 	for i in range(0,len(formattedEquation)):
 		if formattedEquation[i] == "=" or formattedEquation[i] == "≤" or formattedEquation[i] == "≥":
 			equalityOperator = formattedEquation[i]
 			formattedEquation = formattedEquation[0:i] + "-(" + formattedEquation[i+1:len(formattedEquation)] + ")"
 			i = len(formattedEquation)
 	
-	print("Formatted equation after:",formattedEquation)
+	#extracts the variables entered in and converts them into
+	#sympy symbols so computation can be performed
 	variables = getVariables(formattedEquation)
-	print("variables:",variables)
 	for v in variables:
 		sp.var(v)
-	
+
+	#attempts to solve equation and produces an error if unable to	
 	returnString = ""
 	try:
 		result = sp.solve(formattedEquation, x)
-		print("result:",result)
+		
+		#iterates through the returned list to format
+		#the list of values as a solution set
 		returnString = "x " + equalityOperator + " "
 		for answer in result:
-			print("answer:",answer)
 			returnString += str(answer) + ", "
-		print("return string before:",returnString)
 		returnString = returnString[0:len(returnString)-2]
 		returnString = formatLaTex(returnString)
 	except:
-		print("Here?")
 		returnString = equation + " No solution"
 	
 	return returnString
 
 def standardDerivative(equation, variable):
-#	for x in equation:
-#		if variable == x:
-#			found = True
 	formattedEquation = formatInput(equation)
 	equalsLocation = -1
-	
+
+	#converts the variable being differentiated to a sympy symbol	
 	sp.var(variable)
 	variable = sp.Symbol(variable)	
 
+	#determines if there was an equals sign in the entered equation
 	for i in range(0, len(formattedEquation)):
 		if formattedEquation[i] == "=":
 			equalsLocation = i
 	try:
-		print("Just before deriv:",formattedEquation)
+		#if there is an equals sign, evaluates the derivatives
+		#of both sides individually and then rejoins them after
 		if equalsLocation != -1:
-			print("There is an equals!")
 			temp1 = formattedEquation[0:equalsLocation]
 			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
 			temp1 = str(sp.diff(temp1, variable))
@@ -98,9 +97,9 @@ def standardDerivative(equation, variable):
 			returnString = formatLaTex(returnString)
 		else:
 			returnString = str(sp.diff(formattedEquation, variable))
-			print("deriv:", returnString)
 			returnString = formatLaTex(returnString)
 
+		#iterates result and simplifies log(e) to 1
 		found = returnString.find("log(e)")
 		while found != -1:
 			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
@@ -114,18 +113,19 @@ def indefiniteIntegral(equation, variable):
 	formattedEquation = formatInput(equation)
 	equalsLocation = -1
 
-
+	#converts the variable being integrated to a sympy symbol	
 	sp.var(variable)
 	variable = sp.Symbol(variable)	
 
+	#determines if there was an equals sign in the entered equation
 	for i in range(0, len(formattedEquation)):
 		if formattedEquation[i] == "=":
 			equalsLocation = i
-	#if 2 == 2:
+	
 	try:
-		print("Just before deriv:",formattedEquation,"variable:",variable)
+		#if there is an equals sign, evaluates the integral
+		#of both sides individually and then rejoins them after
 		if equalsLocation != -1:
-			print("There is an equals!")
 			temp1 = formattedEquation[0:equalsLocation]
 			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
 			temp1 = str(sp.integrate(temp1, variable))
@@ -134,9 +134,9 @@ def indefiniteIntegral(equation, variable):
 			returnString = formatLaTex(returnString)
 		else:
 			returnString = str(sp.integrate(formattedEquation, variable))
-			print("deriv:", returnString)
 			returnString = formatLaTex(returnString) + "$ + C$"
 
+		#iterates result and simplifies log(e) to 1
 		found = returnString.find("log(e)")
 		while found != -1:
 			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
@@ -149,16 +149,14 @@ def indefiniteIntegral(equation, variable):
 def definiteIntegral(equation, variable):
 	formattedEquation = formatInput(equation)
 	equalsLocation = -1
-
+	
+	#parses data from form fields	
 	index = variable.find("?")
 	higherIndex = variable.find("?", index+1)
 	lowerLimit = variable[index+1:higherIndex]
 	upperLimit = variable[higherIndex+1:len(variable)]
 	variable = variable[0:index]
 
-	print("Upper limit:", upperLimit)
-	print("Lower limit:", lowerLimit)
-	print("Variable:", variable)
 
 	sp.var(variable)
 	variable = sp.Symbol(variable)	
@@ -166,11 +164,10 @@ def definiteIntegral(equation, variable):
 	for i in range(0, len(formattedEquation)):
 		if formattedEquation[i] == "=":
 			equalsLocation = i
-	#if 2 == 2:
+
+	#takes definite integral of the entered equation
 	try:
-		print("Just before deriv:",formattedEquation,"variable:",variable)
 		if equalsLocation != -1:
-			print("There is an equals!")
 			temp1 = formattedEquation[0:equalsLocation]
 			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
 			temp1 = str(sp.integrate(temp1, (variable,upperLimit, lowerLimit)))
@@ -179,7 +176,6 @@ def definiteIntegral(equation, variable):
 			returnString = formatLaTex(returnString)
 		else:
 			returnString = str(sp.integrate(formattedEquation, (variable, upperLimit, lowerLimit)))
-			print("deriv:", returnString)
 			returnString = formatLaTex(returnString)
 
 		found = returnString.find("log(e)")
@@ -195,15 +191,18 @@ def definiteIntegral(equation, variable):
 def ODESolver(equation, variable):
 	formattedEquation = formatInput(equation)
 	equalsLocation = -1
-	
+
+	#sets up sympy function used as a wrapper for the entered variable	
 	f = sp.Function("f")	
 
+	#converts the variable to f(variable) to fir sympy formatting
 	index = formattedEquation.find(variable)
 	while index != -1:
 		formattedEquation = formattedEquation[0:index] + "f(" + variable + ")"  + formattedEquation[index+1:len(formattedEquation)]
 		index = formattedEquation.find(variable, index + 3)
 		
-	
+
+	#converts derivative apostrophes to the sympy diff() function
 	index = formattedEquation.find("\'\'")
 	while index != -1:
 		formattedEquation = formattedEquation[0:index] + ".diff(" + variable + ",2)"  + formattedEquation[index+2:len(formattedEquation)]
@@ -214,11 +213,9 @@ def ODESolver(equation, variable):
 		formattedEquation = formattedEquation[0:index] + ".diff()"  + formattedEquation[index+1:len(formattedEquation)]
 		index = formattedEquation.find("\'", index + 1)
 
-	print("function version:",formattedEquation)
-	
+
+	#converts entered variables to sympy symbols	
 	variables = getVariables(formattedEquation)
-	print("variables:",variables)
-	
 	for v in variables:
 		sp.var(v)
 	
@@ -228,9 +225,9 @@ def ODESolver(equation, variable):
 	for i in range(0, len(formattedEquation)):
 		if formattedEquation[i] == "=":
 			equalsLocation = i
-	#if 2 == 2:
+	
+	#attempts to solve ODE equation
 	try:
-		print("Just before deriv:",formattedEquation,"variable:",variable)
 		if equalsLocation != -1:
 			temp1 = formattedEquation[0:equalsLocation]
 			temp2 = formattedEquation[equalsLocation+1:len(formattedEquation)]
@@ -241,7 +238,6 @@ def ODESolver(equation, variable):
 		else:
 			formattedEquation = sp.sympify(formattedEquation)
 			returnString = str(sp.dsolve(formattedEquation, variable))
-			print("deriv:", returnString)
 			returnString = formatLaTex(returnString)
 
 		found = returnString.find("log(e)")
@@ -249,7 +245,8 @@ def ODESolver(equation, variable):
 			returnString = returnString[0:found] + returnString[found+6:len(returnString)]
 			found = returnString.find("log(e)")
 
-		
+	
+		#converts from sympy format to more intuitive format	
 		index = returnString.find(",")
 		if index != -1:
 			returnString = str(variable) + " = " + returnString[index+2:len(returnString)-2]
@@ -257,15 +254,11 @@ def ODESolver(equation, variable):
 		index = returnString.find("exp")
 		while index != -1:
 			returnString = returnString[0:index] + "e^" + returnString[index+3:len(returnString)]
-			print("Bad 1:",returnString)
 			if returnString[index+2] == "(":
-				print("Bad inside:",returnString)
 				index += 2
 				returnString = returnString[0:index] + "{" + returnString[index+1:len(returnString)]
-				print("Bad middle:",returnString)
 				numRightParenthesis = 1
 				oldPosition = index
-				print("Bad:",returnString)
 				while numRightParenthesis > 0:
 					index += 1
 					if returnString[index] == ")":
@@ -283,6 +276,8 @@ def ODESolver(equation, variable):
 	return returnString
 
 
+#iterates through string and returns a list 
+#of the unique characters it contains
 def getVariables(equation):
 	variables = []
 	for x in equation:
@@ -295,19 +290,13 @@ def getVariables(equation):
 	
 	return variables
 
+#converts symbols in input to the symbols need for
+#calculating the corresponding function in sympy
 def formatInput(equation):
-
-	"""index = equation.find("sin")
-	while index != -1:
-		equation = equation[0:index] + "sp.s" + equation[index+1:len(equation)]	
-		index = equation.find("sin", index+4)
-		print("in:",index)
-	"""
 	counter = len(equation)
 	i = 0
 	while counter > 0:
-		#print(equation[i], counter)
-		if (equation[i].isdigit() and equation[i+1].isalpha()): #or (equation[i].isalpha() and equation[i+1].isalpha()):
+		if (equation[i].isdigit() and equation[i+1].isalpha()):
 			equation = equation[0:i+1] + "*" + equation[i+1:len(equation)]
 			counter += 1
 		elif equation[i] == "^":
@@ -339,44 +328,14 @@ def formatInput(equation):
 				equation = equation[0:i] + ")"
 			counter = 0
 
-	print("Inside:",equation)
 	return equation
-	
 
-def formatSolveInput(equation):
-	"""reversedPart = ""
-	for x in equation:
-		if x == "=":
-			reversedPart = getReversedValues(equation[i:len(equation)])
 
-	returnString = equation	
-
-	return returnString"""
-	pass
-			
-
-def getReversedValues(equation):
-	firstTerm = True
-	returnString = ""
-	for i in range(0,len(equation)):
-		j = 0
-		if firstTerm:
-			if equation[i] == "-":
-				firstTerm = "+"
-			else:
-				pass
-			while j != len(equation):
-				#if
-				j += 1
-			
-			firstTerm = False
-		else:
-			pass
-
+#iterates through input and extracts the individual terms
+#in the equation i.e. operators, numbers, variables, etc
 def parseTerms(equation):
 	terms = []
 	currentTerm = ""
-	print("pt:",equation)
 	for i in range(0,len(equation)):
 		if isOperator(equation[i]):
 			if currentTerm == "":
@@ -393,21 +352,18 @@ def parseTerms(equation):
 
 	return terms
 
+#determines if a character is an operator
 def isOperator(character):
 	if not character.isdigit() and not character.isalpha():
 		return True
 
 	return False
-	"""if (character == "+" or character == "-" or character == "*" or
-	character == "/" or character == "<" or character == "=" or
-	character == ">" or character == "(" or character == ")"):
-		pass"""
 
+#formats the output from sympy into an easier to read
+#format for rendering using LaTex onm the destination page
 def formatLaTex(equation):
 	terms = parseTerms(equation)
-	#print("inside format latex")
 	for i in range(0,len(terms)):
-		print(i)
 		if terms[i] == "sqrt":
 			terms[i] = "\sqrt"
 			i += 1
@@ -429,13 +385,11 @@ def formatLaTex(equation):
 		elif terms[i] == "*":
 			if terms[i+1] == "*":
 				numRightParenthesis = 1 if terms[i+2] == "(" else 0
-				#print("POwer:",terms[i+2])
 				terms[i] = "^"
 				terms[i+1] = "{"
 				if numRightParenthesis == 1:
 					terms[i+2] = ""
 				i += 2
-				#numRightParenthesis = 1
 				oldPosition = i
 				while numRightParenthesis > 0:
 					i += 1
@@ -444,12 +398,7 @@ def formatLaTex(equation):
 					elif terms[i] == "(":
 						numRightParenthesis += 1
 				if i == oldPosition:
-					#terms[i-1] = terms[i]
-					#terms[i] = ""
 					terms.insert(i+1,"}")
-					#terms = terms[0:i+1] + "}" + terms[i+1:len(terms)]
-					print("pow:",terms)
-					#i -= 1
 				else:
 					terms[i] = "}"
 					i = oldPosition
@@ -458,110 +407,89 @@ def formatLaTex(equation):
 
 
 	returnString = "".join(terms)	
-	print("Fixed:",returnString)
 	return "$" + returnString + "$"
 
+
 def matrix_multiplication(equation):
-	index = equation.find("|")
-	rowOneIndex = equation.find("|", index+1)
-	columnOneIndex = equation.find("|", rowOneIndex+1)
-	rowTwoIndex = equation.find("|", columnOneIndex+1)
-	columnTwoIndex = equation.find("|", rowTwoIndex+1)
 
-	print("Equation:",equation)
-	print("Index:",index)
-	print("Row One Index:",rowOneIndex)
-	print("Column One Index:",columnOneIndex)
-	print("Row Two Index:",rowTwoIndex)
-	print("Column Two Index:",columnTwoIndex)
+	#parses the terms from the form fields
+	equationParts = equation.split("|") 	
+
 	
-	matrixOneString = equation[0:index]
-	matrixTwoString = equation[index+1:rowOneIndex]
-	numOneRows = int(equation[rowOneIndex+1:columnOneIndex])
-	numOneCols = int(equation[columnOneIndex+1:rowTwoIndex])
-	numTwoRows = int(equation[rowTwoIndex+1:columnTwoIndex])
-	numTwoCols = int(equation[columnTwoIndex+1:len(equation)])
+	matrixOneString = equationParts[0]
+	matrixTwoString = equationParts[1]
+	numOneRows = int(equationParts[2])
+	numOneCols = int(equationParts[3])
+	numTwoRows = int(equationParts[4])
+	numTwoCols = int(equationParts[5])
 
+	#multiplcation cannot be performed if not in format n x m * m x k
 	if numOneCols != numTwoRows:
 		return "Error, the number of columns in matrix 1 must equal the number of rows in matrx 2"
 
+	#converts string of comma seperated values into a 2d matrix
 	matrixOne = convertStringToMatrix(matrixOneString, numOneRows, numOneCols)
 	matrixTwo = convertStringToMatrix(matrixTwoString, numTwoRows, numTwoCols)
 
-	#if()
-	
+	#converts to sympy matrices	
 	matrixOne = sp.Matrix(matrixOne)
 	matrixTwo = sp.Matrix(matrixTwo)
-	
-	resultMatrix = matrixOne*matrixTwo
 
-	resultMatrix = resultMatrix.tolist()
-	
-	print("Result:", resultMatrix)	
+	#attempts matrix multiplcation and then converts 
+	#sympy matrix result into a matrix in LaTex format
+	returnString = ""	
+	try:
+		resultMatrix = matrixOne*matrixTwo
+		resultMatrix = resultMatrix.tolist()
 
-#-------------------NEED TO FORMAT AND DOUBLE CHECK RESULT OF MULTIPLICATION
-
-	returnString = "$\\left[\\begin{matrix}"
-	for i in range(0,len(resultMatrix)):
-		for j in range(0,len(resultMatrix[i])):
-			if j == len(resultMatrix[i]) - 1:
-				returnString += str(resultMatrix[i][j])
-			else:	
-				returnString += str(resultMatrix[i][j]) + " &"
-		returnString += "\\"
-		returnString += "\\"
-	returnString += "\\end{matrix}\\right]$"
-	
-	print(returnString)
+		returnString = "$\\left[\\begin{matrix}"
+		for i in range(0,len(resultMatrix)):
+			for j in range(0,len(resultMatrix[i])):
+				if j == len(resultMatrix[i]) - 1:
+					returnString += str(resultMatrix[i][j])
+				else:	
+					returnString += str(resultMatrix[i][j]) + " &"
+			returnString += "\\"
+			returnString += "\\"
+		returnString += "\\end{matrix}\\right]$"
+	except:
+		returnString = "Error, unable to perform matrix multiplication"
 
 	return returnString
 
 def matrix_addition(equation):
-	index = equation.find("|")
-	rowIndex = equation.find("|", index+1)
-	columnIndex = equation.find("|", rowIndex+1)
-	operationIndex = equation.find("|", columnIndex+1)
+	
+	#parses terms from form fields
+	equationParts = equation.split("|")
 
-	"""print("Index:",index)
-	print("Row Index:",rowIndex)
-	print("Column Index:",columnIndex)"""
+	matrixOneString = equationParts[0]
+	matrixTwoString = equationParts[1]
+	numRows = int(equationParts[2])
+	numCols = int(equationParts[3])
+	operation = equationParts[4]
 
-	matrixOneString = equation[0:index]
-	matrixTwoString = equation[index+1:rowIndex]
-	numRows = int(equation[rowIndex+1:columnIndex])
-	numCols = int(equation[columnIndex+1:operationIndex])
-	operation = equation[operationIndex+1:len(equation)]
-
+	#converts string of values to matrices
 	matrixOne = convertStringToMatrix(matrixOneString, numRows, numCols)
 	matrixTwo = convertStringToMatrix(matrixTwoString, numRows, numCols)
-	
-	print("Matrix one:", matrixOneString)
-	print("Matrix two:", matrixTwoString)
-	print("Number of rows:", numRows)
-	print("Number of columns:", numCols)
 
-	print("Outside 1:", matrixOne)	
-	print("Outside 2:", matrixTwo)	
-	print("Operation:", operation)
-	
+	#performs matrix addition or subtraction by 
+	#adding/subtracting the value at every coordinate
+	#with the value at that same coordinates in the other matrix	
 	resultMatrix = []
 	if operation == "+":
 		for i in range(0,numRows):
 			temp = []
 			for j in range(0,numCols):
-				#temp.append(int(matrixOne[i][j])+int(matrixTwo[i][j]))
 				temp.append(eval(matrixOne[i][j]+"+"+matrixTwo[i][j]))
 			resultMatrix.append(temp)
 	else:
 		for i in range(0,numRows):
 			temp = []
 			for j in range(0,numCols):
-				#temp.append(int(matrixOne[i][j])-int(matrixTwo[i][j]))
 				temp.append(eval(matrixOne[i][j]+ "-" + matrixTwo[i][j]))
 			resultMatrix.append(temp)
 	
-	print("Result:", resultMatrix)	
-
+	#convert sympy matrix to LaTex formatted matrix
 	returnString = "$\\left[\\begin{matrix}"
 	for i in range(0,len(resultMatrix)):
 		for j in range(0,len(resultMatrix[i])):
@@ -573,68 +501,58 @@ def matrix_addition(equation):
 		returnString += "\\"
 	returnString += "\\end{matrix}\\right]$"
 	
-	print(returnString)
-
 	return returnString
-	"""for i in range(0,numRows):
-		for j in range(0,numCols):
-			pass
-	"""
 
+#uses entered row and column length to convert a list of 
+#comma seperated values into the corresponding 2d matrix
 def convertStringToMatrix(field, numRows, numCols):
 	matrix = []
 	index = 0
 	for i in range(0,numRows):
 		temp = []
 		for j in range(0,numCols):
-			#temp.append(field[2*(j+(i*numCols))])
 			nextIndex = field.find(",",index)
 			if nextIndex == -1:
 				nextIndex = len(field)
 			temp.append(field[index:nextIndex])
 			index = nextIndex + 1
 		matrix.append(temp)
-		#print(temp)
-	#print("matrix:",matrix)	
+	
 	return matrix
 
-#NOTE: everything here is completely untested
+
 def solveSystemOfEquations(equation):
 	#seperates the equations into a list
 	equations = equation.split("|")
 
-	print(equations)
-	
+	#extracts variables from the entered equation 
+	#and converts them into sympy symbols
 	variables = getVariables(equation)
-	print("variables:",variables)
 	for i in range(0, len(variables)):
 		sp.var(variables[i])
 		variables[i] = sp.sympify(variables[i])	
-	
+
+	#finds location of equality operator if present and converts
+	#equation to the form required for the sympy solver		
 	for i in range(0, len(equations)):
 		equations[i] = formatInput(equations[i])
 		for j in range(0,len(equations[i])):
 			if equations[i][j] == "=" or equations[i][j] == "≤" or equations[i][j] == "≥":
 				equations[i] = equations[i][0:j] + "-(" + equations[i][j+1:len(equations[i])] + ")"
 				j = len(equations[i])
-		print(equations[i])
 		equations[i] = sp.sympify(equations[i])
-		print(equations[i])
 
 
+	#solves system of equations 
 	returnString = ""
 	try:
-		print(equations)
-		print(variables)
 		result = sp.linsolve(equations, variables)
-		print(result)
+		
 		if type(result).__name__ == "EmptySet":
 			returnString = "No solution"
 		else:
 			result = list(list(result)[0])
 			for i in range(0, len(variables)):
-				print(variables[i])
-				print(str(result[i]))
 				returnString += str(variables[i]) + " = " + str(result[i]) + ", "
 			returnString = returnString[0:len(returnString)-2]
 		
@@ -645,21 +563,20 @@ def solveSystemOfEquations(equation):
 
 
 def matrix_RREF(equation):
+	#parses terms from form fields
 	equations = equation.split("|")
 	matrixString = equations[0]
 	numRows = int(equations[1])
 	numCols = int(equations[2])
-	matrix = convertStringToMatrix(matrixString, numRows, numCols)
-	print(matrix)
-	matrix = sp.Matrix(matrix)
-	print("After:",matrix)
 
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	matrix = sp.Matrix(matrix)
+
+	#performs row reduction algorithm and returns LaTex formatted matrix
 	returnString = ""
 	try:
 		matrix = matrix.rref()
-		print(matrix)
 		resultMatrix = list(matrix)[0].tolist()
-		print("List:",matrix)
 		returnString = "$\\left[\\begin{matrix}"
 		for i in range(0,len(resultMatrix)):
 			for j in range(0,len(resultMatrix[i])):
@@ -677,25 +594,7 @@ def matrix_RREF(equation):
 	return returnString
 
 def matrix_determinant(equation):
-	equations = equation.split("|")
-	matrixString = equations[0]
-	numRows = int(equations[1])
-	numCols = int(equations[2])
-	matrix = convertStringToMatrix(matrixString, numRows, numCols)
-	print(matrix)
-	matrix = sp.Matrix(matrix)
-	print("After:",matrix)
-
-	returnString = ""
-	try:
-		returnString = matrix.det()
-	except:
-		returnString = "Error, unable to put in RREF form"
-
-	return returnString
-
-
-def matrix_transpose(equation):
+	#parses terms from form fields
 	equations = equation.split("|")
 	matrixString = equations[0]
 	numRows = int(equations[1])
@@ -704,10 +603,31 @@ def matrix_transpose(equation):
 	matrix = convertStringToMatrix(matrixString, numRows, numCols)
 	matrix = sp.Matrix(matrix)
 
+	#computes determinant of matrix and returns value
+	returnString = ""
+	try:
+		returnString = matrix.det()
+	except:
+		returnString = "Error, unable to take determinant"
+
+	return returnString
+
+
+def matrix_transpose(equation):
+	#parses terms from form fields
+	equations = equation.split("|")
+	matrixString = equations[0]
+	numRows = int(equations[1])
+	numCols = int(equations[2])
+	
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	matrix = sp.Matrix(matrix)
+
+	#finds transpose of entered matrix and returns the LaTex formatted matrix
 	returnString = ""
 	try:
 		matrix = matrix.T
-		print("Transpose:",matrix)
+		
 		resultMatrix = matrix.tolist()
 		returnString = "$\\left[\\begin{matrix}"
 		for i in range(0,len(resultMatrix)):
@@ -727,21 +647,22 @@ def matrix_transpose(equation):
 
 
 def matrix_inverse(equation):
+	#parses terms from form fields
 	equations = equation.split("|")
 	matrixString = equations[0]
 	numRows = int(equations[1])
 	numCols = int(equations[2])
+	
 	matrix = convertStringToMatrix(matrixString, numRows, numCols)
-	print(matrix)
 	matrix = sp.Matrix(matrix)
-	print("After:",matrix)
 
+	#fnids inverse of matrix and returns LaTex formatted matrix
 	returnString = ""
 	try:
 		matrix = matrix**-1
-		print(matrix)
+		
 		resultMatrix = matrix.tolist()
-		print("List:",matrix)
+		
 		returnString = "$\\left[\\begin{matrix}"
 		for i in range(0,len(resultMatrix)):
 			for j in range(0,len(resultMatrix[i])):
@@ -760,15 +681,17 @@ def matrix_inverse(equation):
 
 
 def matrix_eigenvalues(equation):
+	#parses terms from form fields
 	equations = equation.split("|")
 	matrixString = equations[0]
 	numRows = int(equations[1])
 	numCols = int(equations[2])
-	matrix = convertStringToMatrix(matrixString, numRows, numCols)
-	print(matrix)
-	matrix = sp.Matrix(matrix)
-	print("After:",matrix)
 
+	matrix = convertStringToMatrix(matrixString, numRows, numCols)
+	matrix = sp.Matrix(matrix)
+
+	#determines eigenvalues of matrix and 
+	#returns them as a comma seperated list
 	returnString = ""
 	try:
 		result = matrix.eigenvals()

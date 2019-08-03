@@ -1,6 +1,5 @@
-moving = "";
+
 movement = false;
-//numBoxes = 0;
 cursorCurrentParent = "equation-input";
 
 function initAlt(id){
@@ -46,7 +45,7 @@ function init(){
 	textarea.innerHTML = "";
 
 	input.addEventListener("keypress", function(event){
-		//alert("code: " + event.keyCode + ", value: " + String.fromCharCode(event.keyCode));
+		
 		cursor = document.getElementById("cursor");
 
 		var character = String.fromCharCode(event.keyCode);
@@ -60,15 +59,13 @@ function init(){
 			newNode.id = "sup-" + cursor.className;
 			newNode.appendChild(newInnerNode);
 			character = "^{}";
-			//newContent = document.createTextNode(" ");
-			//alert(doGetCaretPosition(textarea));
 		}else{
 			newNode.className = "input-item";
 			newNode.appendChild(newContent);
 		}
 
 
-		insertAtCursor(newNode, character); //type
+		insertAtCursor(newNode, character);
 
 		textarea = document.getElementById("id_textarea");
 
@@ -82,7 +79,7 @@ function init(){
 		var classNum = Number(cursor.className);
 		var prevNum = classNum;
 		movement = false; //used to handle case where non-arrow key is entered
-		//alert(classNum + ", " + (classNum+1));
+		
 		switch(event.keyCode){
 			case 37: //left arrow key
 				if(classNum > 1 || cursorCurrentParent != "equation-input"){
@@ -107,8 +104,6 @@ function init(){
 		}
 
 		if(classNum != prevNum && movement){
-			//console.log("Here");
-			//moving = setInterval(moveCursor, 100);
 			moveCursor(classNum);
 		}
 	});
@@ -124,8 +119,6 @@ function init(){
 }
 
 function moveCursor(position){
-//console.log("Start of move: " + position);
-	//cursorParent = "equation-input";
 
 	newId = false;
 
@@ -134,21 +127,18 @@ function moveCursor(position){
 		position *= -1;
 		moveBack = true;
 	}
-	//console.log(position);
-	//var input = document.getElementById("equation-input");
+
 	var input = document.getElementById(cursorCurrentParent);
-	console.log(input.id);
+
 	var inputItems = input.children;
 
 	if(cursorCurrentParent.substring(0,3) == "num" && position >= inputItems.length){
 		cursorCurrentParent = "den-" + cursorCurrentParent.substring(4,cursorCurrentParent.length);
-		console.log("numerator switch: " + cursorCurrentParent);
-
+		
 		newInputItems = document.getElementById(cursorCurrentParent).parentElement.children[1];
 		newPosition = 1;
 		cursorPosition = (position < 1) ? 1 : inputItems.length - 1;
 
-		//console.log();
 		newInputItems.insertBefore(inputItems[cursorPosition], newInputItems.children[newPosition]);
 		var cursor = document.getElementById("cursor");
 		cursor.className = newPosition;		
@@ -160,7 +150,6 @@ function moveCursor(position){
 		newPosition = newInputItems.children.length;
 		cursorPosition = 1;
 
-		console.log("Heyah: " + newPosition);
 		newInputItems.appendChild(inputItems[cursorPosition]);
 		var cursor = document.getElementById("cursor");
 		cursor.className = newPosition;		
@@ -178,19 +167,18 @@ function moveCursor(position){
 		}
 
 		newInputItems.insertBefore(inputItems[cursorPosition], newInputItems.children[newPosition]);
-		//console.log("new cursor pos: " + input.id.substring(4,input.id.length));
+		
 		var cursor = document.getElementById("cursor");
 		cursor.className = newPosition;
 		return "";
 	}
 
 
-	for(var i = 1; i < inputItems.length; i++){
-		//console.log(inputItems[i].className);		
+	for(var i = 1; i < inputItems.length; i++){	
 		changeAmount = (moveBack) ? -1 : 1;
 		if(inputItems[i].className == position && inputItems[i + changeAmount].className == "sup"){ //exponentials
 			inputItems[i].className = (!moveBack) ? "1" : inputItems[i+changeAmount].children.length;
-			//console.log(inputItems[i].className + ", " + inputItems[i+changeAmount].children.length);
+			
 			if(moveBack){
 				inputItems[i+changeAmount].appendChild(inputItems[i]);
 			}else{
@@ -200,20 +188,18 @@ function moveCursor(position){
 					inputItems[i+changeAmount].insertBefore(inputItems[i], inputItems[i+changeAmount].children[1]);
 				}
 				
-				//console.log(inputItems[i][0].className);
 			}
 			
 			smallOffset = (moveBack) ? -1 : 0;
 
 			cursorCurrentParent = inputItems[i+smallOffset].id;
 			inputItems[i+smallOffset].style.border = "2px solid darkgreen";
-			//console.log("new id: " +cursorCurrentParent);
+
 			newId = true;
 
 			i = inputItems.length;
-			//input.removeChild(inputItems[i]);
 		}else if(inputItems[i].className == position && inputItems[i + changeAmount].className == "fraction"){ //fraction
-			console.log("Should go into numerator");
+			
 			numChild = (!moveBack) ? 0 : 1;
 			inputItems[i].className = (!moveBack) ? "1" : inputItems[i+changeAmount].children[numChild].children.length;
 
@@ -230,9 +216,7 @@ function moveCursor(position){
 			smallOffset = (moveBack) ? -1 : 0;
 
 			cursorCurrentParent = inputItems[i+smallOffset].children[numChild].id;
-			//inputItems[i+smallOffset].style.border = "2px solid darkgreen";
-			console.log(inputItems[i+smallOffset].children[numChild].className);
-			console.log("new id: " +cursorCurrentParent);
+			
 			newId = true;
 
 			i = inputItems.length;
@@ -252,21 +236,14 @@ function moveCursor(position){
 			inputItems[i+changeAmount].className = position;
 			inputItems[i+changeAmount].id = "cursor";
 
-			//console.log("Inside move: " + inputItems[i].className + ", " + inputItems[i+changeAmount].className);
 			i = inputItems.length;
-
-			//alert(inputItems[i].innerHTML + ", " + inputItems[i+1].innerHTML);
 		}
 	}
 
-	//if(!newId){
-		//cursorCurrentParent = "equation-input";
-	//}
 	return "";
 }
 
 function removeItem(position){
-	//var input = document.getElementById("equation-input");
 	var input = document.getElementById(cursorCurrentParent);
 	var inputItems = input.children;
 
@@ -283,7 +260,6 @@ function removeItem(position){
 
 			if(i < inputItems.length){
 				if(inputItems[i].className == "sup"){
-					//console.log("SKREEEE");
 					inputItems[i].id = "sup-" + (i-1);
 				}else if(inputItems[i].className == "fraction"){
 					inputItems[i].id = "frac-" + (i-1);
@@ -293,7 +269,7 @@ function removeItem(position){
 			}
 
 			interpretEquation();
-			//console.log("position");
+			
 			return position;
 		}
 	}
@@ -309,7 +285,6 @@ function shiftContainers(position, direction){
 			newPosition = Number(inputItems[i].id.substring(4,inputItems[i].id.length));
 			newPosition += direction;
 			inputItems[i].id = "sup-" + newPosition;
-			console.log("INNNNN");
 		}else if(inputItems[i].className == "fraction"){
 			newPosition = Number(inputItems[i].id.substring(5,inputItems[i].id.length));
 			newPosition += direction;
@@ -328,12 +303,10 @@ function validateDerivativeVariable(term){
 		variable.className = "error";
 		document.getElementById("derivative-error").innerHTML = "You may only enter a variable.";
 	}else if(variable.value.length > 1){
-		console.log("No");
 		variable.value = variable.value.substring(0,1);
 		variable.className = "error";
 		document.getElementById("derivative-error").innerHTML = "You may only choose one variable to take the " + term + " of.";
 	}else{
-		console.log("Good!");
 		document.getElementById("derivative-error").innerHTML = "";
 		variable.className = "";
 	}
@@ -346,27 +319,22 @@ function validateDerivativeVariable(term){
 }
 
 function updateRows(elem){
-	//console.log(elem);
-	//console.log(elem.value[elem.value.length-1]);
 	var matrixOne = document.getElementById("matrix-1").children[0];
 	if(elem.id != "num-rows-1" && elem.id != "num-cols-1"){
 		var matrixTwo = document.getElementById("matrix-2").children[0];
 	}
-	console.log("rows before: " + matrixOne.children.length);
+
 	if(isNaN(elem.value[elem.value.length-1])){
 		elem.value = elem.value.substring(0, elem.value.length-1);
 		return;
 	}
 	
+	//only allows numbers in the range 1 <= x <= 5
 	if(Number(elem.value) > 5){
 		elem.value = 5;
-		//alert();
 	}else if(Number(elem.value) < 1){
 		elem.value = 1;
 	}
-	
-	//NEED TO CHANGE HERE FOR HAVING MATRICES OF 2 DIFFERENT SIZES
-	//need to do adding rows and whole column section
 
 	if(elem.id == "num-rows" || elem.id == "num-rows-1" || elem.id == "num-rows-2"){
 		numRows = Number(elem.value);
@@ -378,8 +346,6 @@ function updateRows(elem){
 		}
 		if(deltaRows > 0){
 			while(deltaRows > 0){
-				//console.log(matrixOne.children[matrixOne.children.length-1]);
-				//console.log(matrixOne.children);
 				if(elem.id == "num-rows" || elem.id == "num-rows-1"){
 					matrixOne.removeChild(matrixOne.children[matrixOne.children.length-1]);
 					matrixOne = document.getElementById("matrix-1").children[0];
@@ -390,7 +356,6 @@ function updateRows(elem){
 					matrixTwo = document.getElementById("matrix-2").children[0];
 				}
 
-				//console.log(deltaRows);
 				deltaRows--;
 			}
 		}else if(deltaRows < 0){
@@ -421,7 +386,7 @@ function updateRows(elem){
 	}else{
 		numCols = Number(elem.value);
 		deltaCols = (elem.id == "num-cols-2") ? matrixTwo.children[0].children.length - numCols : matrixOne.children[0].children.length - numCols;
-		console.log("delta cols: " + deltaCols);
+		
 		matrixLength = (elem.id == "num-cols-2") ? matrixTwo.children.length : matrixOne.children.length;
 		if(deltaCols > 0){
 			for(var i = 0; i < matrixLength; i++){
@@ -445,9 +410,8 @@ function updateRows(elem){
 				insideText += "<td class='column'><textarea></textarea></td>";
 				deltaCols++;
 			}
-			console.log(insideText);
+			
 			for(var i = 0; i < matrixLength; i++){
-
 				if(elem.id == "num-cols" || elem.id == "num-cols-1"){
 					matrixOne.children[i].innerHTML += insideText;
 				}
@@ -455,7 +419,6 @@ function updateRows(elem){
 				if(elem.id == "num-cols" || elem.id == "num-cols-2"){
 					matrixTwo.children[i].innerHTML += insideText;
 				}
-				//console.log("After: " + matrixOne.children[i].innerHTML);
 			}
 		}
 	}
@@ -491,11 +454,9 @@ function updateBothMatrices(operation){
 
 function copyFieldsToMatrix(matrix){
 	copyMatrix = [];
-	console.log("matrix: " + matrix);
 	for(var i = 0; i < matrix.children.length; i++){
 		temp = [];
 		for(var j = 0; j < matrix.children[i].children.length; j++){
-			//console.log(matrix.children[i].children[j]);
 			value = matrix.children[i].children[j].children[0].value;
 			if(value == ""){
 				temp.push(0);
@@ -504,7 +465,6 @@ function copyFieldsToMatrix(matrix){
 				for(var k = 0; k < value.length; k++){
 					if(isNaN(value[k]) && value[k] != "/" && value[k] != "." &&
 						 value[k] != "-" && value[k] != "*" && value[k] != "(" && value[k] != ")"){
-						console.log("Not valid");
 						valid = false;
 					}
 				}
@@ -530,6 +490,7 @@ function updateNumSystems(elem){
 		return;
 	}
 	
+	//only allows numbers in the range 1 <= x <= 5
 	if(Number(elem.value) > 5){
 		elem.value = 5;
 	}else if(Number(elem.value) < 1){
@@ -539,12 +500,12 @@ function updateNumSystems(elem){
 	var inputs = document.getElementsByClassName("system-textarea");
 	difference = Number(elem.value) - inputs.length;
 
-	if(difference < 0){ //some inputs need to be removed
+	if(difference < 0){ //inputs need to be removed
 		while(difference < 0){
 			inputs[inputs.length-1].parentNode.removeChild(inputs[inputs.length-1]);
 			difference++;
 		}
-	}else if(difference > 0){ //some inputs need to be added
+	}else if(difference > 0){ //inputs need to be added
 		while(difference > 0){
 			newNode = document.createElement("textarea");
 			newNode.className = "system-textarea";
